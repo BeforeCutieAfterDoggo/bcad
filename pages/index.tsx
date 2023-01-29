@@ -28,6 +28,7 @@ export default function Home(): any {
         <StyledPanel  style={{cursor:'pointer'}}header={<span className="text-3xl font-mono" style={{cursor:'pointer',color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000001</span>} key="1">
 
           <div>
+            <p className=' font-mono mb-2'>🍄 The Trip Book</p>
             <img src="/drops/drop1.png" />
           </div>
         </StyledPanel>
