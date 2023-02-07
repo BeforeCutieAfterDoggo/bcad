@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Collapse } from 'antd';
 import styled from 'styled-components';
+import Link from 'next/link'
 const StyledPanel = styled(Collapse.Panel)`
   &&& {
     border: none;
@@ -32,9 +33,9 @@ export default function Home(): any {
 
           <div>
             <p className=' font-mono mb-2'>🍄 The Trip Book</p>
-            <a href="https://6393998291548.gumroad.com/l/trip?_gl=1*q9vdtc*_ga*MTk1ODU3MTc5LjE2NzU3OTEwNDc.*_ga_6LJN6D94N6*MTY3NTc5MTA0Ny4xLjEuMTY3NTc5MzEyMS4wLjAuMA">
+            <Link href='/project/1'>
             <img src="/drops/drop1.png" />
-            </a>
+            </Link>
           </div>
         </StyledPanel>
         <StyledPanel showArrow={false} header={<span className="text-3xl font-mono" style={{ color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000002</span>} key="2">
