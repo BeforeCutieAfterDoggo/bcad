@@ -21,11 +21,13 @@ export default function FrontPage({ children }: Props) {
           </div>
         </div>
 
-        <div className="mr-4 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 mr-10">
-
-
-
-
+        <div className="mr-4 mt-4 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 mr-10">
+          <a href='https://discord.gg/reNuqypRKk'>
+            <p className='font-mono text-white mr-6'>Discord</p>
+          </a>
+          <a href='https://twitter.com/bcad_dot_one'>
+            <p className='font-mono text-white '>Twitter</p>
+          </a>
         </div>
       </nav>
 
