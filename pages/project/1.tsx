@@ -26,7 +26,7 @@ export default function ProductPage() {
                             <table className="w-full text-center">
 
                                 <tbody className="text-black font-mono text-start">
-                                    <tr className="border-t-2 border-b-2 border-black">
+                                    <tr className=" border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Page</td>
                                         <td className="px-4 py-2 italic  ">27</td>
                                     </tr>
@@ -49,7 +49,7 @@ export default function ProductPage() {
                                 </tbody>
                             </table>
                             <a target="_blank" rel="noreferrer" href="https://6393998291548.gumroad.com/l/trip?_gl=1*q9vdtc*_ga*MTk1ODU3MTc5LjE2NzU3OTEwNDc.*_ga_6LJN6D94N6*MTY3NTc5MTA0Ny4xLjEuMTY3NTc5MzEyMS4wLjAuMA">
-                                <button className="mt-10 pb-2 border border-2 border-black text-black font-bold font-mono py-2 px-4 italic bg-[#F585AD]">Buy On Gumroad</button>
+                                <button className="mt-10 pb-2 border border-2 border-black text-black font-bold font-mono py-2 px-4 italic bg-[#F585AD] mb-10">Buy On Gumroad</button>
                             </a>
                         </div>
 
