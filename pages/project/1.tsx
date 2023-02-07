@@ -44,7 +44,7 @@ export default function ProductPage() {
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Description</td>
-                                        <td className="px-4 py-2 italic ">Cutie's first mushroom trip through the eyes of AI. A highly personal, fun, sentimental, and profound experience. </td>
+                                        <td className="px-4 py-2 italic ">Cutie&apos;s first mushroom trip through the eyes of AI. A highly personal, fun, sentimental, and profound experience. </td>
                                     </tr>
                                 </tbody>
                             </table>
