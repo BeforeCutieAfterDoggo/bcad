@@ -17,11 +17,11 @@ export default function ProductPage() {
                     </h1>
 
                 </div>
-                <div className="mx-auto mt-6 text-gray-500 divide divide-y-2 divide-black">
-                    <img src="/drops/drop1/1.png"></img>
+                <div className="mx-auto mt-6 text-gray-500 divide divide-y-2 divide-black lg:bg-gray-200">
+                    <img className="mx-auto" src="/drops/drop1/1.png"></img>
                     <div className="md:flex justify-center">
-                        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2">
-                            <img className=" w-full border-r-2 border-b-2 border-black" src="/drops/drop1/loop.gif"></img>
+                        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 ">
+                            <img className=" w-full border-r-2 border-b-2 border-black " src="/drops/drop1/loop.gif"></img>
                         </div>
 
                         <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex flex-col items-center justify-center  border-b-2 border-black">

@@ -34,7 +34,7 @@ export default function Home(): any {
           <div>
             <p className=' font-mono mb-2'>🍄 The Trip Book</p>
             <Link href='/project/1'>
-            <img src="/drops/drop1.png" />
+            <img className='mx-auto' src="/drops/drop1.png" />
             </Link>
           </div>
         </StyledPanel>
