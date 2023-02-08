@@ -14,7 +14,7 @@ export default function FrontPage({ children }: Props) {
           <div className="flex items-center justify-between w-full md:w-auto">
             <Link href='/'>
               <a>
-                <img className="h-16 mt-2 ml-10" src="/icons/bcad.png" />
+                <img className="h-10 md:h-16 lg:h-16 xl:h-16 mt-2 ml-10" src="/icons/bcad.png" />
               </a>
             </Link>
 
@@ -23,7 +23,7 @@ export default function FrontPage({ children }: Props) {
 
         <div className="mr-4 mt-4 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 mr-10">
           <a href='https://discord.gg/reNuqypRKk'>
-            <p className='font-mono text-white mr-6'>Discord</p>
+            <p className='font-mono text-white mr-6 ml-2'>Discord</p>
           </a>
           <a href='https://twitter.com/bcad_dot_one'>
             <p className='font-mono text-white '>Twitter</p>

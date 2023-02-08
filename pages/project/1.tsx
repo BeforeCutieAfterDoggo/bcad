@@ -1,5 +1,7 @@
 
 export default function ProductPage() {
+    //detect if user is on mobile
+
     return (
         <div className="relative overflow-hidden bg-white py-16">
             <div className="hidden lg:absolute lg:inset-y-0 lg:block lg:h-full lg:w-full lg:[overflow-anchor:none]">
@@ -17,12 +19,12 @@ export default function ProductPage() {
                 </div>
                 <div className="mx-auto mt-6 text-gray-500 divide divide-y-2 divide-black">
                     <img src="/drops/drop1/1.png"></img>
-                    <div className="flex justify-center">
-                        <div className="w-1/2">
+                    <div className="md:flex justify-center">
+                        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2">
                             <img className=" w-full border-r-2 border-b-2 border-black" src="/drops/drop1/loop.gif"></img>
                         </div>
 
-                        <div className="w-1/2 flex flex-col items-center justify-center  border-b-2 border-black">
+                        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex flex-col items-center justify-center  border-b-2 border-black">
                             <table className="w-full text-center">
 
                                 <tbody className="text-black font-mono text-start">
