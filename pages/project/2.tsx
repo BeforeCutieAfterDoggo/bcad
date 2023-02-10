@@ -18,7 +18,7 @@ export default function ProductPage() {
 
                 </div>
                 <div className="mx-auto mt-6 text-gray-500   relative">
-                    <img className="absolute inset-0 h-96 w-screen object-cover " src="/drops/drop2/grad2.png" alt="" />
+                    <img className="absolute inset-0 h-56 md:h-96 w-screen object-cover " src="/drops/drop2/grad2.png" alt="" />
 
                     <img className="relative mx-auto" src="/drops/drop2.png"></img>
 
