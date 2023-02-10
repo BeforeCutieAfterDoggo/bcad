@@ -22,12 +22,12 @@ export default function ProductPage() {
 
                     <img className="relative mx-auto" src="/drops/drop2.png"></img>
 
-                    <div className="md:flex justify-center h-full">
-                        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 ">
+                    <div className="xl:flex justify-center h-full">
+                        <div className="w-full   xl:w-1/2 ">
                             <img className=" w-full border-r-2 border-b-2 border-black border-t-2 " src="/drops/drop2/cmd.png"></img>
                         </div>
 
-                        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex flex-col items-center justify-center  border-b-2 border-t-2  border-black">
+                        <div className="w-full  xl:w-1/2 flex flex-col items-center justify-center  border-b-2 border-t-2  border-black">
                             <table className="w-full text-center">
 
                                 <tbody className="text-black font-mono text-start">
