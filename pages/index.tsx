@@ -37,7 +37,7 @@ export default function Home(): any {
             </Link>
           </div>
         </StyledPanel>
-        <StyledPanel showArrow={false} header={<span className="text-3xl font-mono" style={{ color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000002 🍝 Meet Spaghettify</span>} key="2">
+        <StyledPanel showArrow={false} header={<span className="text-3xl font-mono" style={{ color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000002 🍝 Spaghettify</span>} key="2">
           <div className='relative bg-white' >
             <img className="absolute inset-0 h-96 w-screen object-cover " src="/drops/drop2/grad2.png" alt="" />
             <Link href='/project/2'>

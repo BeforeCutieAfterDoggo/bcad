@@ -22,7 +22,7 @@ export default function ProductPage() {
 
                     <img className="relative mx-auto" src="/drops/drop2.png"></img>
 
-                    <div className="md:flex justify-center">
+                    <div className="md:flex justify-center h-full">
                         <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 ">
                             <img className=" w-full border-r-2 border-b-2 border-black border-t-2 " src="/drops/drop2/cmd.png"></img>
                         </div>
@@ -46,7 +46,7 @@ export default function ProductPage() {
                       
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Description</td>
-                                        <td className="px-4 py-2 italic ">Coding is not a very visceral activity. You sit in front of a screen, type some stuff, and then you have some stuff on a screen. What if we could make it more delicious, like shoveling down a massive plate of spaghetti. </td>
+                                        <td className="px-4 py-2 italic ">Make your code worse magically, with the power of AI. Meet Spaghettify. </td>
                                     </tr>
                                 </tbody>
                             </table>
