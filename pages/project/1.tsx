@@ -14,6 +14,7 @@ export default function ProductPage() {
                         <span className="mt-2 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
                             TRIP
                         </span>
+                        <p className="text-center font-mono italic">Biochemical Creative Adventure Diary</p>
                     </h1>
 
                 </div>

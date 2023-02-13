@@ -14,6 +14,8 @@ export default function ProductPage() {
                         <span className="mt-2 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
                             Meet Spaghettify
                         </span>
+                        <p className="text-center font-mono italic">Boring Code Achieves Deliciousness</p>
+
                     </h1>
 
                 </div>

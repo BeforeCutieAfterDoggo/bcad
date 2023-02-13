@@ -29,7 +29,7 @@ export default function Home(): any {
       </main>
 
       <Collapse style={{ border: "2px solid white", borderRadius: 0 }} defaultActiveKey={['2']}>
-        <StyledPanel showArrow={false} style={{ cursor: 'pointer' }} header={<span className="text-xl md:text-3xl font-mono" style={{ cursor: 'pointer', color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000001 🍄 The Trip Book</span>} key="1">
+        <StyledPanel showArrow={false} style={{ cursor: 'pointer' }} header={<span className="text-xl md:text-3xl font-mono" style={{ cursor: 'pointer', color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000001 🍄 Biochemical Creative Adventure Diary</span>} key="1">
 
           <div className='xl:bg-[#E4E4E2] xl:text-black'>
             <Link href='/project/1'>
@@ -37,7 +37,7 @@ export default function Home(): any {
             </Link>
           </div>
         </StyledPanel>
-        <StyledPanel showArrow={false} header={<span className="text-xl md:text-3xl font-mono " style={{ color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000002 🍝 Spaghettify</span>} key="2">
+        <StyledPanel showArrow={false} header={<span className="text-xl md:text-3xl font-mono " style={{ color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>DROP #000002 🍝 Boring Code Achieves Deliciousness</span>} key="2">
           <div className='relative bg-white' >
             <img className="absolute inset-0  h-56 md:h-96 w-screen object-cover " src="/drops/drop2/grad2.png" alt="" />
             <Link href='/project/2'>
