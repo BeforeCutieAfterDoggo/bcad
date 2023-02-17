@@ -40,7 +40,7 @@ export default function ProductPage() {
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Reading Comprehensiveness</td>
-                                        <td className="px-4 py-2 italic ">Very good (●'◡'●)</td>
+                                        <td className="px-4 py-2 italic ">Very good (●&apos;◡&apos;●)</td>
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Image Generating Quality</td>
