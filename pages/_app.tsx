@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter();
 
   useEffect(() => {
-    Fathom.load(process.env.FATHOM_CODE, {
+    Fathom.load(process.env.NEXT_PUBLIC_FATHOM_CODE as string, {
       includedDomains: ["bcad.one"],
     });
 
