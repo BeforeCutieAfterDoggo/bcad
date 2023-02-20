@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import * as Fathom from "fathom-client";
 import "../style/App.css";
+import { useFathom } from "../hooks/useFathom";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -16,26 +17,11 @@ type AppPropsWithLayout = AppProps & {
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") return;
-    Fathom.load(process.env.NEXT_PUBLIC_FATHOM_CODE as string, {
-      includedDomains: ["bcad.one"],
-    });
-
-    function onRouteChangeComplete() {
-      Fathom.trackPageview();
-    }
-    // Record a pageview when route changes
-    router.events.on("routeChangeComplete", onRouteChangeComplete);
-
-    // Unassign event listener
-    return () => {
-      router.events.off("routeChangeComplete", onRouteChangeComplete);
-    };
-  }, []);
+  useFathom("VBPBGBTF", {
+    url: "https://crystal-parrot.bcad.one/script.js",
+    includedDomains: ["bcad.one"],
+    spa: "auto",
+  });
 
   return (
     <Layout>
