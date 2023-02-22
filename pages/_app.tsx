@@ -4,9 +4,7 @@ import Layout from "../components/layout";
 import { PropsWithChildren, ReactElement, ReactNode, useEffect } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import * as Fathom from "fathom-client";
 import "../style/App.css";
-import { useFathom } from "../hooks/useFathom";
 import PlausibleProvider from "next-plausible";
 
 type NextPageWithLayout = NextPage & {
@@ -18,7 +16,6 @@ type AppPropsWithLayout = AppProps & {
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
-  useFathom();
 
   const PlausibleWrapper = ({ children }: PropsWithChildren<{}>) => {
     if (process.env.NODE_ENV === "production") {
