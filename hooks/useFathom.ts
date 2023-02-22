@@ -1,23 +1,26 @@
-import { load, trackPageview } from "fathom-client";
+import * as Fathom from "fathom-client";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import * as React from "react";
 
-type UseFathomParams = Parameters<typeof load>;
+export function useFathom() {
+  const router = useRouter();
 
-export function useFathom(...[siteId, options]: UseFathomParams) {
-  const { events } = useRouter();
+  React.useEffect(() => {
+    Fathom.load("VBPBGBTF", {
+      url: "https://crystal-parrot.bcad.one/script.js",
+      includedDomains: ["bcad.one"],
+    });
 
-  useEffect(() => {
-    load(siteId, options);
+    function onRouteChangeComplete() {
+      Fathom.trackPageview();
+    }
+    // Record a pageview when route changes
+    router.events.on("routeChangeComplete", onRouteChangeComplete);
 
-    events.on("routeChangeComplete", onRouteChangeComplete);
-
+    // Unassign event listener
     return () => {
-      events.off("routeChangeComplete", onRouteChangeComplete);
+      router.events.off("routeChangeComplete", onRouteChangeComplete);
     };
-  }, [events]);
-}
-
-function onRouteChangeComplete() {
-  trackPageview();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }

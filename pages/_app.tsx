@@ -18,11 +18,7 @@ type AppPropsWithLayout = AppProps & {
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
-  useFathom("VBPBGBTF", {
-    url: "https://crystal-parrot.bcad.one/script.js",
-    includedDomains: ["bcad.one"],
-    spa: "auto",
-  });
+  useFathom();
 
   const PlausibleWrapper = ({ children }: PropsWithChildren<{}>) => {
     if (process.env.NODE_ENV === "production") {
