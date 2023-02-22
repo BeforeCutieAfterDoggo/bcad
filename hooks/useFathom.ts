@@ -18,8 +18,6 @@ export function useFathom(...[siteId, options]: UseFathomParams) {
   }, [events]);
 }
 
-function onRouteChangeComplete(pathname: string) {
-  trackPageview({
-    url: `${location.protocol}//${location.hostname}${pathname}`,
-  });
+function onRouteChangeComplete() {
+  trackPageview();
 }
