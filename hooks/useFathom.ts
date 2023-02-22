@@ -7,7 +7,6 @@ export function useFathom() {
 
   React.useEffect(() => {
     Fathom.load("VBPBGBTF", {
-      url: "https://crystal-parrot.bcad.one/script.js",
       includedDomains: ["bcad.one"],
     });
 
