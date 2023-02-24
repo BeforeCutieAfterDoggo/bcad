@@ -40,7 +40,7 @@ export default function ProductPage() {
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Description</td>
-                                        <td className="px-4 py-2 italic ">To celebrate the partnership of OpenAI, Bain Capital, and Coca-Cola, we're releasing an AI image bot supported by native advertising. All of your images come back with a little bit of Coca-Cola magic 🪄🥰 </td>
+                                        <td className="px-4 py-2 italic ">To celebrate the partnership of OpenAI, Bain Capital, and Coca-Cola, we&apos;re releasing an AI image bot supported by native advertising. All of your images come back with a little bit of Coca-Cola magic 🪄🥰 </td>
                                     </tr>
                                 </tbody>
                             </table>
