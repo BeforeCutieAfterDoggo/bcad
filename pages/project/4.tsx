@@ -36,7 +36,7 @@ export default function ProductPage() {
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Price</td>
-                                        <td className="px-4 py-2 italic ">1 Twitter Follow</td>
+                                        <td className="px-4 py-2 italic ">1 Twitter Follow <a className="text-[#E61D2A]" target="_blank" rel="noreferrer"  href="https://twitter.com/bcad_dot_one">@bcad_dot_one</a></td>
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Description</td>
