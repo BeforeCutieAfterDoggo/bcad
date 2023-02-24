@@ -62,7 +62,7 @@ export default function ProductPage() {
                                 </tbody>
                             </table>
                             <a target="_blank" rel="noreferrer" href="https://discord.gg/2usz2bqekQ">
-                                <button className="mt-10 pb-2 flex border border-2 border-black text-white font-bold font-mono py-2 px-4 bg-gradient-to-r from-[#1C1B19] to-[#B03DCB]  mb-10 text-3xl "> 🔮 <p className="text-lg italic ml-2 mt-1 ">Try IT OUT! </p></button>
+                                <button className="mt-10 pb-2 flex border border-2 border-black text-white font-bold font-mono py-2 px-4 bg-gradient-to-r from-[#1C1B19] to-[#B03DCB]  mb-10 text-3xl "> 🔮 <p className="text-lg italic ml-2 mt-1 ">TRY IT OUT! </p></button>
                             </a>
                         </div>
 

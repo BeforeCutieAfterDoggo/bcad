@@ -35,8 +35,35 @@ export default function Home(): any {
 
       <Collapse
         style={{ border: "2px solid white", borderRadius: 0 }}
-        defaultActiveKey={["3"]}
+        defaultActiveKey={["4"]}
       >
+        <StyledPanel
+          showArrow={false}
+          header={
+            <span
+              className="text-xl md:text-3xl font-mono "
+              style={{
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              DROP #000004 🥤 Bain x Coca-Cola: Advertisement Diffusion
+            </span>
+          }
+          key="4"
+        >
+          <div className="relative bg-[#1C1B19]">
+            <Link href="/project/4">
+              <img
+                style={{ cursor: "pointer" }}
+                className="relative mx-auto"
+                src="/drops/drop4.jpg"
+              ></img>
+            </Link>
+          </div>
+        </StyledPanel>
         <StyledPanel
           showArrow={false}
           header={
