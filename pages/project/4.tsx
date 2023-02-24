@@ -36,7 +36,7 @@ export default function ProductPage() {
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Price</td>
-                                        <td className="px-4 py-2 italic ">1 Twitter Follow <a className="text-[#E61D2A]" target="_blank" rel="noreferrer"  href="https://twitter.com/bcad_dot_one">@bcad_dot_one</a></td>
+                                        <td className="px-4 py-2 italic ">1 Twitter Follow </td>
                                     </tr>
                                     <tr className="border-t-2 border-b-2 border-black">
                                         <td className="px-4 py-2 font-bold ">Description</td>
@@ -44,7 +44,7 @@ export default function ProductPage() {
                                     </tr>
                                 </tbody>
                             </table>
-                            <a target="_blank" rel="noreferrer" href="https://twitter.com/trashmob_">
+                            <a target="_blank" rel="noreferrer" href="https://twitter.com/coke_diffusion/status/1629173900197371904">
                                 <button className="mt-10 pb-2 flex border border-2 border-black text-white font-bold font-mono py-2 px-4 bg-white  mb-10 text-3xl "> 🥤 <p className="text-lg italic ml-2 mt-1 text-[#E61D2A] "> CocaCola your prompt now! </p></button>
                             </a>
                         </div>
