@@ -35,8 +35,37 @@ export default function Home(): any {
 
       <Collapse
         style={{ border: "2px solid white", borderRadius: 0 }}
-        defaultActiveKey={["4"]}
+        defaultActiveKey={["5"]}
       >
+                <StyledPanel
+          showArrow={false}
+          header={
+            <span
+              className="text-xl md:text-3xl font-mono "
+              style={{
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              DROP #000005 🥰 Bonded Crowd Assessment Device
+            </span>
+          }
+          key="5"
+        >
+          <div className="relative bg-[#1C1B19]">
+            <Link href="/project/5">
+              <img
+                style={{ cursor: "pointer" }}
+                className="relative mx-auto"
+                src="/drops/drop5.png"
+              ></img>
+            </Link>
+          </div>
+        </StyledPanel>
+
+
         <StyledPanel
           showArrow={false}
           header={
@@ -91,6 +120,8 @@ export default function Home(): any {
             </Link>
           </div>
         </StyledPanel>
+
+
         <StyledPanel
           showArrow={false}
           header={
@@ -123,6 +154,8 @@ export default function Home(): any {
             </Link>
           </div>
         </StyledPanel>
+
+
         <StyledPanel
           showArrow={false}
           style={{ cursor: "pointer" }}
