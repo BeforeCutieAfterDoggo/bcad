@@ -29,23 +29,19 @@ export default function ProductPage() {
                                     <tbody className="text-black font-mono text-start">
                                         <tr className=" border-b-2 border-black">
                                             <td className="px-4 py-2 font-bold ">What For</td>
-                                            <td className="px-4 py-2 italic ">Having A good time with your community</td>
+                                            <td className="px-4 py-2 italic ">Real-time, Anonymous Q&A Sessions, made with love</td>
                                         </tr>
                                         <tr className="border-t-2 border-b-2 border-black">
                                             <td className="px-4 py-2 font-bold ">Features</td>
-                                            <td className="px-4 py-2 italic ">People can submit and answer questions in real time. Then they can review view visual representations of the answers in the VibeBoard. In addition, there are three AI Judges you can use to give you a summary of your community based on the answers.</td>
+                                            <td className="px-4 py-2 italic ">People can submit and answer questions in real time. The data can be viewed as a summary in the VibeBoard. In addition, there are three AI Judges you can use to give you a summary of your community based on the answers.</td>
                                         </tr>
                                         <tr className="border-t-2 border-b-2 border-black">
                                             <td className="px-4 py-2 font-bold ">Format</td>
-                                            <td className="px-4 py-2 italic ">Webapp</td>
-                                        </tr>
-                                        <tr className="border-t-2 border-b-2 border-black">
-                                            <td className="px-4 py-2 font-bold ">Types</td>
-                                            <td className="px-4 py-2 italic ">Short Answer, Multiple Choices, Scale</td>
+                                            <td className="px-4 py-2 italic ">Web App</td>
                                         </tr>
                                         <tr className="border-t-2 border-b-2 border-black">
                                             <td className="px-4 py-2 font-bold ">Description</td>
-                                            <td className="px-4 py-2 italic ">Ever wondering what&apos;s the overall profile and vibe of your beloved community? Do you have questions that you always wanted to ask but not dared to? VibeCheck enables you to host a anonymous and live interaction with your community fellows.</td>
+                                            <td className="px-4 py-2 italic ">Ever wonder what's the overall vibe of your beloved community? Ever wanted to ask the group a spicy question but didn't know how? VibeCheck enables you to host anonymous, real-time Q&A round with your community fellows.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -56,11 +52,12 @@ export default function ProductPage() {
                         </div>
                     </div>
                     <div className="xl:flex flex-col justify-center  h-full  border-black">
-                        <h1 className="mt-10 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">Case Community - Mars College</h1>
-                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">With basic questions such as &quot;Tag the Community&quot;, &quot;What&apos;s your sexual preference?&quot;, &quot;What&apos;s your food preference?&quot;, &quot;How do you transport?&quot; etc. You could easily draw an impression of an community. Given Mars College as an example:
-                            <b> It&apos;s a tech-centric, hippie community full of artsy people and builders. However, if you&apos;re looking for delicious food, you might be at the wrong place.
-                                There are a lot of people practicing polyamory in this community compared to default society, and most people are meat eater. The most common way to travel around the community is using electrical unicycle.
-                                Most people are living in a Trailer/RV and the women to men ratio is about 4:6 with a few being gender fluid or trans.</b>
+                        <h1 className="mt-10 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">Case Study - Mars College</h1>
+                        <p className="px-4 mt-10 text-black font-mono italic">Asking questions such as "Tag the Community", "What's your sexual preference?", "What's your food preference?", "How do you transport?" can give you a quick reading of what the vibe of a community is like.
+                        </p>
+                        <p className="px-4 mt-10 text-black font-mono italic">Given Mars College as an example: </p>
+                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">
+                            <b>It's a tech-centric, hippie community full of artsy people and builders. The ratio of women:men is about 2:3, with some being trans or gender-fluid. Also, there are a lot of people practicing polyamory in this community. Most people are meat eaters, but if you're looking for delicious food, you might be at the wrong place. The most common way to travel around the community is using electric unicycle, and most people are living in a Trailer/RV</b>
                         </p>
                         <div className="flex  ">
                             <img className="w-1/4 border-b-2 border-t-2 border-r-2 border-black" src="/drops/drop5/1.png" />
@@ -77,7 +74,7 @@ export default function ProductPage() {
                             <img className="w-1/2 border-b-2 border-t-2 border-r-2 border-black" src="/drops/drop5/3.2.png" />
                         </div>
                         <p className="px-4 mt-10 text-black font-mono mb-6 italic">
-                            But hey! People are still very grateful of what the experience have bought to them c:
+                            But hey! People are still very grateful of what the experience brought them c:
                         </p>
                         <div className="flex ">
                             <img className="w-full border-b-2 border-t-2 border-r-2 border-black" src="/drops/drop5/2.png" />
