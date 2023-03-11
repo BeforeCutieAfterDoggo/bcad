@@ -41,7 +41,7 @@ export default function ProductPage() {
                                         </tr>
                                         <tr className="border-t-2 border-b-2 border-black">
                                             <td className="px-4 py-2 font-bold ">Description</td>
-                                            <td className="px-4 py-2 italic ">Ever wonder what's the overall vibe of your beloved community? Ever wanted to ask the group a spicy question but didn't know how? VibeCheck enables you to host anonymous, real-time Q&A round with your community fellows.</td>
+                                            <td className="px-4 py-2 italic ">Ever wonder what&apos;s the overall vibe of your beloved community? Ever wanted to ask the group a spicy question but didn&apos;t know how? VibeCheck enables you to host anonymous, real-time Q&A round with your community fellows.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -53,11 +53,11 @@ export default function ProductPage() {
                     </div>
                     <div className="xl:flex flex-col justify-center  h-full  border-black">
                         <h1 className="mt-10 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">Case Study - Mars College</h1>
-                        <p className="px-4 mt-10 text-black font-mono italic">Asking questions such as "Tag the Community", "What's your sexual preference?", "What's your food preference?", "How do you transport?" can give you a quick reading of what the vibe of a community is like.
+                        <p className="px-4 mt-10 text-black font-mono italic">Asking questions such as &quot;Tag the Community&quot;, &quot;What&apos;s your sexual preference?&quot;, &quot;What&apos;s your food preference?&quot;, &quot;How do you transport?&quot; can give you a quick reading of what the vibe of a community is like.
                         </p>
                         <p className="px-4 mt-10 text-black font-mono italic">Given Mars College as an example: </p>
                         <p className="px-4 mt-10 text-black font-mono mb-6 italic">
-                            <b>It's a tech-centric, hippie community full of artsy people and builders. The ratio of women:men is about 2:3, with some being trans or gender-fluid. Also, there are a lot of people practicing polyamory in this community. Most people are meat eaters, but if you're looking for delicious food, you might be at the wrong place. The most common way to travel around the community is using electric unicycle, and most people are living in a Trailer/RV</b>
+                            <b>It&apos;s a tech-centric, hippie community full of artsy people and builders. The ratio of women:men is about 2:3, with some being trans or gender-fluid. Also, there are a lot of people practicing polyamory in this community. Most people are meat eaters, but if you&apos;re looking for delicious food, you might be at the wrong place. The most common way to travel around the community is using electric unicycle, and most people are living in a Trailer/RV</b>
                         </p>
                         <div className="flex  ">
                             <img className="w-1/4 border-b-2 border-t-2 border-r-2 border-black" src="/drops/drop5/1.png" />
