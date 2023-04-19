@@ -35,9 +35,36 @@ export default function Home(): any {
 
       <Collapse
         style={{ border: "2px solid white", borderRadius: 0 }}
-        defaultActiveKey={["5"]}
+        defaultActiveKey={["6"]}
+      ><StyledPanel
+        showArrow={false}
+        header={
+          <span
+            className="text-xl md:text-3xl font-mono "
+            style={{
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            DROP #000006 🐟 Biennale Convention for Acquiring Doodads
+          </span>
+        }
+        key="6"
       >
-                <StyledPanel
+          <div className="relative bg-[#1C1B19]">
+            <Link href="/project/6">
+              <img
+                style={{ cursor: "pointer" }}
+                className="relative mx-auto"
+                src="/drops/drop6.png"
+              ></img>
+            </Link>
+          </div>
+        </StyledPanel>
+
+        <StyledPanel
           showArrow={false}
           header={
             <span
