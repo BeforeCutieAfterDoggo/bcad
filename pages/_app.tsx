@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import "../style/App.css";
 import PlausibleProvider from "next-plausible";
+import CartProvider from "../pages/context/CartContext";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -27,12 +28,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   };
 
   return (
-    <PlausibleWrapper>
-      <Layout>
-        {/* {getLayout(<Component {...pageProps} />) }  */}
-        <Component {...pageProps} />
-      </Layout>
-    </PlausibleWrapper>
+    <CartProvider>
+      <PlausibleWrapper>
+        <Layout>
+          {/* {getLayout(<Component {...pageProps} />) }  */}
+          <Component {...pageProps} />
+        </Layout>
+      </PlausibleWrapper>
+    </CartProvider>
   );
 }
 export default MyApp;
