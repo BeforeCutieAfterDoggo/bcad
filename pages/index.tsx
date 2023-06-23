@@ -37,8 +37,36 @@ export default function Home(): any {
 
       <Collapse
         style={{ border: "2px solid white", borderRadius: 0 }}
-        defaultActiveKey={["6"]}
-      ><StyledPanel
+        defaultActiveKey={["7"]}
+      >
+        <StyledPanel
+        showArrow={false}
+        header={
+          <span
+            className="text-xl md:text-3xl font-mono "
+            style={{
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            DROP #000007 📦 Box of Cards for Authentic Dialogue 
+          </span>
+        }
+        key="7"
+      >
+          <div className="relative bg-[#1C1B19]">
+            <Link href="/project/7">
+              <img
+                style={{ cursor: "pointer" }}
+                className="relative mx-auto"
+                src="/drops/drop7.png"
+              ></img>
+            </Link>
+          </div>
+        </StyledPanel>
+        <StyledPanel
         showArrow={false}
         header={
           <span

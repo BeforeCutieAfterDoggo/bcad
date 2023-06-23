@@ -14,10 +14,9 @@ export default function FrontPage({ children }: Props) {
           <div className="flex items-center justify-between w-full md:w-auto">
             <Link href='/'>
               <a>
-                <img className="h-10 md:h-16 lg:h-16 xl:h-16 mt-2 ml-10" src="/icons/bcad.png" />
+                <img className="h-10 md:h-16 lg:h-16 xl:h-16 mt-2 ml-2 md:ml-10" src="/icons/bcad.png" />
               </a>
             </Link>
-
           </div>
         </div>
 
