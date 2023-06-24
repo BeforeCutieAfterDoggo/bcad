@@ -79,17 +79,14 @@ export default function ProductPage() {
                         </div>
                     </div>
                     <div className="xl:flex flex-col justify-center  h-full  border-black">
-                        <div className="flex justify-center mt-10">
-                            <div className="flex flex-col">
-                                <p>Get notified on board game launch!</p>
-                                <SubscribeForm />
-                            </div>
-                        </div>
 
+                        <div className="flex justify-center mt-10">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/lCmug_l9QLI" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+
+                        </div>
                         <h1 className="mt-10 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
                             6 Social Archetypes
                         </h1>
-
                         <div className="flex mt-10">
                             <img
                                 className="border-b-2 border-t-2 border-r-2 border-black"
@@ -168,6 +165,12 @@ export default function ProductPage() {
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/9.png"
                             />
+                        </div>
+                        <div className="flex justify-center mt-10">
+                            <div className="flex flex-col">
+                                <p>Get notified on board game launch!</p>
+                                <SubscribeForm />
+                            </div>
                         </div>
                     </div>
                 </div>
