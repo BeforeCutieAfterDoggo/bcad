@@ -36,6 +36,7 @@
     "fuse.js": "^6.6.2",
     "geojson": "^0.5.0",
     "heroicons-react": "^1.4.1",
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "^4.1.1",
     "lunr": "^2.3.9",
@@ -64,6 +65,7 @@
     "typewriter-effect": "^2.19.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.195",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.kebabcase": "^4.1.6",
     "@types/react": "17.0.20",
@@ -77,5 +79,4 @@
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2"
   }
-  
 }

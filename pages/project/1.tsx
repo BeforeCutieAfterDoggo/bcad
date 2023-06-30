@@ -52,7 +52,10 @@ export default function ProductPage() {
                                 </tbody>
                             </table>
                             <a target="_blank" rel="noreferrer" href="https://6393998291548.gumroad.com/l/trip?_gl=1*q9vdtc*_ga*MTk1ODU3MTc5LjE2NzU3OTEwNDc.*_ga_6LJN6D94N6*MTY3NTc5MTA0Ny4xLjEuMTY3NTc5MzEyMS4wLjAuMA">
-                                <button className="mt-10 pb-2 border border-2 border-black text-black font-bold font-mono py-2 px-4 italic bg-[#F585AD] mb-10">Buy On Gumroad</button>
+                                <button className="mr-2 mt-10 pb-2 border border-2 border-black text-black font-bold font-mono py-2 px-4 italic bg-[#F585AD] mb-10">Buy Digital On Gumroad</button>
+                            </a>
+                            <a target="_blank" rel="noreferrer" href="https://6393998291548.gumroad.com/l/yfdrk?layout=profile">
+                                <button className="mr-2 pb-2 border border-2 border-black text-black font-bold font-mono py-2 px-4 italic bg-[#FFBF00] mb-10">Buy Physical On Gumroad</button>
                             </a>
                         </div>
 
