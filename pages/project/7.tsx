@@ -40,7 +40,7 @@ export default function ProductPage() {
                             <div className="w-full  xl:w-1/2 ">
                                 <img
                                     className=" w-full border-r-2 lg:border-b-2  border-black "
-                                    src="/drops/drop7/1.png"
+                                    src="/drops/drop7/0.png"
                                 ></img>
                             </div>
                             <div className="w-full  xl:w-1/2 flex flex-col items-center justify-center  border-b-2 border-black">
