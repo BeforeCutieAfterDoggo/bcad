@@ -14,13 +14,13 @@ export default function FrontPage({ children }: Props) {
           <div className="flex items-center justify-between w-full md:w-auto">
             <Link href='/'>
               <a>
-                <img className="h-10 md:h-16 lg:h-16 xl:h-16 mt-2 ml-2 md:ml-10" src="/icons/bcad.png" />
+                <img className="h-10 mb-4 md:h-14  mt-2 ml-2 md:ml-10" src="/icons/bcad.png" />
               </a>
             </Link>
           </div>
         </div>
 
-        <div className="mr-4 mt-4 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 mr-10">
+        <div className="mr-4 mt-1 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 mr-10">
           <Link href={"https://www.instagram.com/bcad_one/?hl=en"}>
             <a>
               <p className='font-mono text-white mr-5 ml-10'>Ins</p>

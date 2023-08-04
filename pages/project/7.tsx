@@ -80,20 +80,20 @@ export default function ProductPage() {
                     </div>
                     <div className="xl:flex flex-col justify-center  h-full  border-black">
 
-                        <div className="flex justify-center mt-10">
+                        {/* <div className="flex justify-center mt-10">
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/lCmug_l9QLI" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
 
                         </div>
                         <h1 className="mt-10 font-mono italic block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
                             6 Social Archetypes
-                        </h1>
-                        <div className="flex mt-10">
+                        </h1> */}
+                        {/* <div className="flex mt-10">
                             <img
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/2.png"
                             />
-                        </div>
-                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">
+                        </div> */}
+                        {/* <p className="px-4 mt-10 text-black font-mono mb-6 italic">
                             <b>🦒 Intuitor:</b> An Intuitor is a person who communicates with empathy and compassion. The term &quot;Big heart&quot; comes from the book &quot;Nonviolent Communication&quot; by Marshall Rosenberg, where he uses the image of a giraffe with a big heart to symbolize nonviolent communication. In this context, I refer to an Intuitor as a &quot;Sincere Giraffe&quot; because they embody the qualities of authentic relating, nonviolent communication, and conflict resolution.
                             <br />
                             <br />
@@ -111,8 +111,8 @@ export default function ProductPage() {
                             <br />
                             <br />
                             <b>🐜 Specialist:</b>A Specialist is a unique individual who thrives on focused exploration and innovation. Represented by the symbol of the &quot;Focus Ant,&quot; they embody unwavering dedication and meticulous attention to detail. What sets the Specialist apart is their ability to develop their own distinct system and theory by synthesizing knowledge and insights from various fields and other types.
-                        </p>
-                        <div className="flex mt-10">
+                        </p> */}
+                        {/* <div className="flex mt-10">
                             <img
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/3.png"
@@ -120,8 +120,8 @@ export default function ProductPage() {
                         </div>
                         <p className="px-4 mt-10 text-black font-mono mb-6 italic">
                             If you&apos;re a Hunter x Hunter fan, you might be familiar with this diagram. Yes, it&apos;s the diagram of Nen powers. I changed two of the archetypes to intuitors and connectors and rearranged the diagram. The types that are closer to each other are more similar, while the types that are further apart are more different. The kanji at the center represents the word &quot;emotion&quot;.
-                        </p>
-                        <div className="flex">
+                        </p> */}
+                        {/* <div className="flex">
                             <img
                                 className="w-1/2 border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/5.png"
@@ -130,8 +130,8 @@ export default function ProductPage() {
                                 className="w-1/2 border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/4.png"
                             />
-                        </div>
-                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">
+                        </div> */}
+                        {/* <p className="px-4 mt-10 text-black font-mono mb-6 italic">
                             The board game has 120 playing cards, with each archetype containing 20 cards. There are 8 zero-point cards, 7 one-point cards, and 5 two-point cards in each archetype. As shown in the diagram, the three dots next to the score dot represent the colors of the cards that the player has to hold before they can pick and play the card.
                         </p>
                         <div className="flex mt-10">
@@ -139,8 +139,8 @@ export default function ProductPage() {
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/6.png"
                             />
-                        </div>
-                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">
+                        </div> */}
+                        {/* <p className="px-4 mt-10 text-black font-mono mb-6 italic">
                             There are a total of 18 asset cards in the game, with 3 cards for each archetype. Each asset card specifies a different color of card that the player needs to hold, as well as the quantity of colored cards required in order to acquire the asset card on their turn. The large number displayed in the top right corner of the card represents the number of points the player will receive if they successfully obtain that card.
                         </p>
                         <div className="flex mt-10">
@@ -148,8 +148,8 @@ export default function ProductPage() {
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/7.png"
                             />
-                        </div>
-                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">
+                        </div> */}
+                        {/* <p className="px-4 mt-10 text-black font-mono mb-6 italic">
                             In case people are unsure of what to say, we have also created 36 prompt cards for players to reference. Some of these prompt cards provide additional detailed explanations and guidance for the playing cards.
                         </p>
                         <div className="flex mt-10">
@@ -157,21 +157,21 @@ export default function ProductPage() {
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/8.png"
                             />
-                        </div>
-                        <p className="px-4 mt-10 text-black font-mono mb-6 italic">
-                            Finally, we have 6 rule-changing cards, each corresponding to an archetype. Players have the flexibility to use these cards at any time during the game.                        </p>
-                        <div className="flex mt-10">
+                        </div> */}
+                        {/* <p className="px-4 mt-10 text-black font-mono mb-6 italic">
+                            Finally, we have 6 rule-changing cards, each corresponding to an archetype. Players have the flexibility to use these cards at any time during the game.                        </p> */}
+                        {/* <div className="flex mt-10">
                             <img
                                 className="border-b-2 border-t-2 border-r-2 border-black"
                                 src="/drops/drop7/9.png"
                             />
-                        </div>
-                        <div className="flex justify-center mt-10">
+                        </div> */}
+                        {/* <div className="flex justify-center mt-10">
                             <div className="flex flex-col">
                                 <p>Get notified on board game launch!</p>
                                 <SubscribeForm />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
