@@ -20,22 +20,27 @@ export default function FrontPage({ children }: Props) {
           </div>
         </div>
 
-        <div className="mr-4 mt-1 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 mr-10">
+        <div className="mr-4 sm:mr-10 mt-1 items-center flex justify-end sm:flex md:flex md:flex-1 lg:w-0 ">
           <Link href={"https://www.instagram.com/bcad_one/?hl=en"}>
             <a>
-              <p className='font-mono text-white mr-5 ml-10'>Ins</p>
+              <p className='font-mono text-white sm:mr-5 sm:ml-10 ml-3'>Ins</p>
             </a>
           </Link>
           <a href='https://discord.gg/reNuqypRKk'>
-            <p className='font-mono text-white mr-6 ml-2'>Dis</p>
+            <p className='font-mono text-white sm:mr-6 ml-3'>Dis</p>
           </a>
           <a href='https://twitter.com/bcad_dot_one'>
-            <p className='font-mono text-white mr-6'>Twi</p>
+            <p className='font-mono text-white sm:mr-6 ml-3'>Twi</p>
           </a>
 
+          <Link href="https://bcad.substack.com/">
+            <a>
+              <p className='font-mono text-white sm:mr-6 ml-3 '>Sub</p>
+            </a>
+          </Link>
           <Link href="https://bcad.gumroad.com/">
             <a>
-              <p className='font-mono text-white '>Mer</p>
+              <p className='font-mono text-white ml-3 '>Mer</p>
             </a>
           </Link>
         </div>
