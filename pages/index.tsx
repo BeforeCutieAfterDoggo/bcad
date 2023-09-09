@@ -30,9 +30,9 @@ export default function Home(): any {
           className=" absolute m-auto my-64 border border-white border-2 justify-center w-1/2 md:w-1/3 md:my-40 lg:w-1/4 lg:my-36 h-auto xl:w-1/4 xl:my-32 2xl:w-1/4 2xl:my-24 "
           src="/images/1.png"
         />
-        <div className="absolute m-auto bottom-72 sm:bottom-20 md:bottom-40">
+        {/* <div className="absolute m-auto bottom-72 sm:bottom-20 md:bottom-40">
           <SubscribeForm />
-        </div>
+        </div> */}
       </main>
 
       <Collapse
