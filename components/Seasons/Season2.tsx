@@ -42,7 +42,7 @@ export default function Season2(): any {
           key="1"
         >
           <div className="xl:bg-[#E4E4E2] xl:text-black">
-            <Link href="/project/season2/8">
+            <Link href="/project/8">
               <img className="mx-auto" src="/drops/drop8.png" />
             </Link>
           </div>

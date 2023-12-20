@@ -38,7 +38,7 @@ export default function Season1(): any {
           key="7"
         >
           <div className="relative bg-[#1C1B19]">
-            <Link href="/project/season1/7">
+            <Link href="/project/7">
               <img
                 style={{ cursor: "pointer" }}
                 className="relative mx-auto"
@@ -65,7 +65,7 @@ export default function Season1(): any {
           key="6"
         >
           <div className="relative bg-[#1C1B19]">
-            <Link href="/project/season1/6">
+            <Link href="/project/6">
               <img
                 style={{ cursor: "pointer" }}
                 className="relative mx-auto"
@@ -93,7 +93,7 @@ export default function Season1(): any {
           key="5"
         >
           <div className="relative bg-[#1C1B19]">
-            <Link href="/project/season1/5">
+            <Link href="/project/5">
               <img
                 style={{ cursor: "pointer" }}
                 className="relative mx-auto"
@@ -121,7 +121,7 @@ export default function Season1(): any {
           key="4"
         >
           <div className="relative bg-[#1C1B19]">
-            <Link href="/project/season1/4">
+            <Link href="/project/4">
               <img
                 style={{ cursor: "pointer" }}
                 className="relative mx-auto"
@@ -148,7 +148,7 @@ export default function Season1(): any {
           key="3"
         >
           <div className="relative bg-[#1C1B19]">
-            <Link href="/project/season1/3">
+            <Link href="/project/3">
               <img
                 style={{ cursor: "pointer" }}
                 className="relative mx-auto"
@@ -181,7 +181,7 @@ export default function Season1(): any {
               src="/drops/drop2/grad2.png"
               alt=""
             />
-            <Link href="/project/season1/2">
+            <Link href="/project/2">
               <img
                 style={{ cursor: "pointer" }}
                 className="relative mx-auto"
@@ -211,7 +211,7 @@ export default function Season1(): any {
           key="1"
         >
           <div className="xl:bg-[#E4E4E2] xl:text-black">
-            <Link href="/project/season1/1">
+            <Link href="/project/1">
               <img className="mx-auto" src="/drops/drop1.png" />
             </Link>
           </div>

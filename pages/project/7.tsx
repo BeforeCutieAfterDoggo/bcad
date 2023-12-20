@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import SubscribeForm from "../../../components/ConvertKit";
+import SubscribeForm from "../../components/ConvertKit";
 export default function ProductPage() {
   const [checked, setChecked] = useState(false);
   const router = useRouter();

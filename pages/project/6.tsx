@@ -1,5 +1,5 @@
 import React from "react";
-import Toggle from "../../../components/layout/toggle";
+import Toggle from "../../components/layout/toggle";
 import { useState } from "react";
 import { useRouter } from "next/router";
 export default function ProductPage() {
