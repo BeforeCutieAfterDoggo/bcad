@@ -60,7 +60,7 @@ export default function ProductPage() {
                     <td className="px-4 py-2 italic ">
                       An AI-powered captcha bot: Prove that you are <b>a</b>{" "}
                       bot! Join our Discord channel, and we will provide you
-                      with comprehensive justification if you don't get the
+                      with comprehensive justification if you don&apos;t get the
                       answer right.
                     </td>
                   </tr>
@@ -138,7 +138,7 @@ export default function ProductPage() {
             <p className="mx-20">
               If you combine the last two digits of the year when all 6
               challenger packs became available and the second numeric value
-              shown under the "Fighters Pass Vol. 2" price, what number do you
+              shown under the &quot;Fighters Pass Vol. 2&quot; price, what number do you
               get?
             </p>
             <button
