@@ -34,18 +34,18 @@ export default function ProductPage() {
                 <tbody className="text-white font-mono text-start">
                   <tr className=" border-b-2 border-black">
                     <td className="px-4 py-2 font-bold ">Name</td>
-                    <td className="px-4 py-2 italic  ">Bast Captcha</td>
+                    <td className="px-4 py-2 italic  ">
+                      Bast Captcha, Automation Defense
+                    </td>
                   </tr>
                   <tr className="border-t-2 border-b-2 border-black">
                     <td className="px-4 py-2 font-bold ">Price</td>
-                    <td className="px-4 py-2 italic ">Free</td>
+                    <td className="px-4 py-2 italic ">Free (for humans)</td>
                   </tr>
 
                   <tr className="border-t-2 border-b-2 border-black">
                     <td className="px-4 py-2 font-bold ">Format</td>
-                    <td className="px-4 py-2 italic ">
-                      Discord AI Captcha Bot
-                    </td>
+                    <td className="px-4 py-2 italic ">Discord Bot, API</td>
                   </tr>
 
                   <tr className="border-t-2 border-b-2 border-black">
@@ -90,9 +90,9 @@ export default function ProductPage() {
               Number 001
             </p>
             <p className="mx-20">
-              If the pattern length represents the total number of rows, and
-              each row is represented by the pattern width number of beads, what
-              is the total count of beads used to create the entire pattern?
+              If a player buys one Giant Chest, two Magical Chests, and three
+              Pouches of Gold, how many gems will they have left assuming they
+              started with the number of gems displayed at the top?
             </p>
             <button
               className="border border-2 w-48 bg-black mx-auto text-white rounded-xl font-mono"
@@ -101,7 +101,7 @@ export default function ProductPage() {
               {" "}
               Reveal Answer
             </button>
-            {q1 && <p className="mx-20">5760</p>}
+            {q1 && <p className="mx-20">9,282</p>}
             <img
               className="mt-4 relative mx-auto "
               src="/drops/drop8/1.png"
@@ -113,9 +113,10 @@ export default function ProductPage() {
               Number 002
             </p>
             <p className="mx-20">
-              If you opt for a one-month billing cycle, how much would you save
-              compared to the regular monthly price, and by what percentage is
-              this discount represented?
+              If you add the numbers representing the best score in metres
+              displayed at the top left and the number of characters in the
+              largest printed word on the pop-up message, what number do you
+              get?
             </p>
             <button
               className="border border-2 w-48 bg-black mx-auto text-white rounded-xl font-mono"
@@ -124,7 +125,7 @@ export default function ProductPage() {
               {" "}
               Reveal Answer
             </button>
-            {q2 && <p className="mx-20">$10.94</p>}
+            {q2 && <p className="mx-20">108.9</p>}
             <img
               className="mt-4 relative mx-auto "
               src="/drops/drop8/2.png"
@@ -136,10 +137,9 @@ export default function ProductPage() {
               Number 003
             </p>
             <p className="mx-20">
-              If you combine the last two digits of the year when all 6
-              challenger packs became available and the second numeric value
-              shown under the &quot;Fighters Pass Vol. 2&quot; price, what number do you
-              get?
+              If you multiply the number of students enrolled in the course by
+              the percentage discount offered and then divide that product by
+              the number of hours of on-demand video, what number do you get?
             </p>
             <button
               className="border border-2 w-48 bg-black mx-auto text-white rounded-xl font-mono"
@@ -148,7 +148,7 @@ export default function ProductPage() {
               {" "}
               Reveal Answer
             </button>
-            {q3 && <p className="mx-20">119</p>}
+            {q3 && <p className="mx-20">192.5</p>}
             <img
               className="mt-4 relative mx-auto "
               src="/drops/drop8/3.png"
