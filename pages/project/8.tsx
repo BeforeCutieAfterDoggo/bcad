@@ -112,6 +112,7 @@ export default function ProductPage() {
             <p className="mx-20 mt-4 text-2xl font-mono font-bold">
               Number 002
             </p>
+
             <p className="mx-20">
               If you add the numbers representing the best score in metres
               displayed at the top left and the number of characters in the
