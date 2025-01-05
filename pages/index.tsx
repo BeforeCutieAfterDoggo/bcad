@@ -1,7 +1,93 @@
 import Head from "next/head";
-import Season1 from "../components/Seasons/Season1";
-import Season2 from "../components/Seasons/Season2";
-export default function Home(): any {
+import Link from "next/link";
+
+interface DropCard {
+  id: string;
+  emoji: string;
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  date: string;
+}
+
+const drops: DropCard[] = [
+  {
+    id: "8",
+    emoji: "🤖",
+    title: "Bast Captcha, Automation Defense",
+    description: "Prove to me that you are a bot",
+    image: "/drops/drop8.png",
+    link: "/project/8",
+    date: "NOV 2024",
+  },
+  {
+    id: "7",
+    emoji: "📦",
+    title: "Box of Cards for Authentic Dialogue",
+    description: "Emotional Intelligence Board Game",
+    image: "/drops/drop7.png",
+    link: "/project/7",
+    date: "NOV 2024",
+  },
+  {
+    id: "6",
+    emoji: "🎮",
+    title: "Biennale Convention for Acquiring Doodads",
+    description: "Internet black market in Bombay Beach",
+    image: "/drops/drop6.png",
+    link: "/project/6",
+    date: "OCT 2024",
+  },
+  {
+    id: "5",
+    emoji: "🥰",
+    title: "Bonded Crowd Assessment Device",
+    description: "Measuring the collective emotional intelligence of crowds",
+    image: "/drops/drop5.png",
+    link: "/project/5",
+    date: "OCT 2024",
+  },
+  {
+    id: "4",
+    emoji: "🥤",
+    title: "Bain x Coca-Cola: Advertisement Diffusion",
+    description: "Exploring the spread of advertising through neural networks",
+    image: "/drops/drop4.jpg",
+    link: "/project/4",
+    date: "SEP 2024",
+  },
+  {
+    id: "3",
+    emoji: "🔮",
+    title: "Bella Coven, Automated Diviner",
+    description: "AI-powered divination and fortune telling",
+    image: "/drops/drop3.png",
+    link: "/project/3",
+    date: "SEP 2024",
+  },
+  {
+    id: "2",
+    emoji: "🍝",
+    title: "Boring Code Achieves Deliciousness",
+    description:
+      "When algorithms meet cuisine - the intersection of code and cooking",
+    image: "/drops/drop2/drop2.png",
+    link: "/project/2",
+    date: "AUG 2024",
+  },
+  {
+    id: "1",
+    emoji: "🍄",
+    title: "Biochemical Creative Adventure Diary",
+    description: "TRIP: A journey through biochemical creativity",
+    image: "/drops/drop1.png",
+    link: "/project/1",
+    date: "AUG 2024",
+  },
+];
+
+export default function Home() {
   return (
     <>
       <Head>
@@ -12,10 +98,35 @@ export default function Home(): any {
           data-website-id="2f689c74-a3c1-41af-b14a-010a28c4f01f"
         ></script>
       </Head>
-      <main className="min-h-screen pb-14 flex-col justify-center relative">
-        <Season2 />
-        <div className="mt-4">
-          <Season1 />
+      <main className="min-h-screen p-8 bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {drops.map((drop) => (
+            <Link href={drop.link} key={drop.id}>
+              <div className="group cursor-pointer">
+                <div className="relative aspect-video overflow-hidden">
+                  <img
+                    src={drop.image}
+                    alt={drop.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-sm font-mono">
+                    #{drop.id}
+                  </div>
+                  <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-mono">
+                    {drop.date}
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h2 className="text-2xl font-mono font-bold">
+                    {drop.emoji} {drop.title}
+                  </h2>
+                  <p className="text-gray-600 mt-2 font-mono">
+                    {drop.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </main>
     </>

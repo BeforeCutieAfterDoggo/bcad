@@ -1,11 +1,118 @@
-import { useState } from "react";
-import { memories, Memory } from "../data/memories";
+import { useState, useMemo } from "react";
+import { memories, Memory } from "../../data/memories";
+type TagCategory = {
+  name: string;
+  tags: string[];
+};
+
+const tagCategories: TagCategory[] = [
+  {
+    name: "Places",
+    tags: [
+      "Thailand",
+      "Bali",
+      "Berkeley",
+      "California",
+      "Florida",
+      "LA",
+      "Mars",
+      "San Francisco",
+      "Virginia",
+      "China",
+    ],
+  },
+  {
+    name: "Activities & Experiences",
+    tags: [
+      "Adventure",
+      "Shopping",
+      "Travel",
+      "Work",
+      "Walking",
+      "Swimming",
+      "Party",
+      "Performance",
+      "Hiking",
+      "Exercise",
+      "Climbing",
+      "DIY",
+      "Cooking",
+      "Baking",
+      "Learning",
+      "Hackathon",
+      "Games",
+      "Anime",
+    ],
+  },
+  {
+    name: "Food & Drinks",
+    tags: [
+      "Food",
+      "Coffee",
+      "Restaurant",
+      "Ice Cream",
+      "Pizza",
+      "Korean",
+      "Chinese",
+      "Street Food",
+      "Vegetarian",
+      "Drinks",
+      "Grocery",
+    ],
+  },
+  {
+    name: "Lifestyle & Interests",
+    tags: [
+      "Tech",
+      "Crypto",
+      "Art",
+      "Music",
+      "Books",
+      "Fashion",
+      "Plants",
+      "Pets",
+      "Antiques",
+      "Wellness",
+      "Spa",
+      "Spiritual",
+      "Cozy",
+      "Nature",
+      "Garden",
+    ],
+  },
+  {
+    name: "Social & Special Moments",
+    tags: [
+      "Family",
+      "Friends",
+      "Community",
+      "Date",
+      "Birthday",
+      "Special",
+      "Love",
+      "Fun",
+      "Celebration",
+      "Milestone",
+      "Achievement",
+    ],
+  },
+];
 
 export default function ProductPage() {
   const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  // Generate array of numbers from 1 to 108 for the grid
-  const imageNumbers = Array.from({ length: 108 }, (_, i) => i + 1);
+  // Get unique tags
+  const uniqueTags = useMemo(() => {
+    const allTags = memories.flatMap((memory) => memory.tags);
+    return Array.from(new Set(allTags)).sort();
+  }, []);
+
+  // Filter memories based on selected tag
+  const filteredMemories = useMemo(() => {
+    if (!selectedTag) return memories;
+    return memories.filter((memory) => memory.tags.includes(selectedTag));
+  }, [selectedTag]);
 
   return (
     <div className="relative overflow-hidden bg-white py-16">
@@ -25,10 +132,47 @@ export default function ProductPage() {
           </h1>
         </div>
 
+        {/* Tags Container */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+          <div className="flex flex-col gap-2 mt-4">
+            <button
+              onClick={() => setSelectedTag(null)}
+              className={`px-3 py-1 rounded-full text-sm w-fit ${
+                selectedTag === null
+                  ? "bg-black text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              All
+            </button>
+
+            {tagCategories.map((category) => (
+              <div key={category.name} className="space-y-2">
+                <h3 className="font-bold text-gray-700 ">{category.name}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.tags.map((tag) => (
+                    <button
+                      key={tag}
+                      onClick={() => setSelectedTag(tag)}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        selectedTag === tag
+                          ? "bg-black text-white"
+                          : "bg-gray-200 hover:bg-gray-300"
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Grid Container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-9 gap-4 mt-4">
-            {memories.map((memory) => (
+            {filteredMemories.map((memory) => (
               <div
                 key={memory.id}
                 className="aspect-square relative group cursor-pointer"
