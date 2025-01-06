@@ -19,7 +19,7 @@ const drops: DropCard[] = [
     description: "Prove to me that you are a bot",
     image: "/drops/drop9.png",
     link: "/project/9",
-    date: "NOV 2024",
+    date: "Jan 2025",
   },
   {
     id: "8",
@@ -28,7 +28,7 @@ const drops: DropCard[] = [
     description: "Prove to me that you are a bot",
     image: "/drops/drop8.png",
     link: "/project/8",
-    date: "NOV 2024",
+    date: "NOV 2023",
   },
   {
     id: "7",
@@ -113,10 +113,10 @@ export default function Home() {
             <Link href={drop.link} key={drop.id} passHref>
               <div className="group cursor-pointer">
                 <div className="flex justify-between mb-2">
-                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono">
+                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono border border-black">
                     #{drop.id}
                   </div>
-                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono">
+                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono font-bold">
                     {drop.date}
                   </div>
                 </div>

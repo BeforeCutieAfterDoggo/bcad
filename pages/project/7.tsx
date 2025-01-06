@@ -78,7 +78,7 @@ export default function ProductPage() {
                     Soon)
                   </button>
                 </a> */}
-                <a target="_blank" rel="noreferrer" href="eibg.one">
+                <a target="_blank" rel="noreferrer" href="https://www.eibg.one">
                   <button className="mt-10 bg-[#05ce78] pb-2 text-black border border-black border-2 font-bold font-mono py-2 px-4 italic   mb-10">
                     📦 Get your physical copy Today!
                   </button>
