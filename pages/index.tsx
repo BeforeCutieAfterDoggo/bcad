@@ -13,6 +13,15 @@ interface DropCard {
 
 const drops: DropCard[] = [
   {
+    id: "9",
+    emoji: "🎊",
+    title: "BCAD’s Collected Adventure Drawings",
+    description: "Prove to me that you are a bot",
+    image: "/drops/drop9.png",
+    link: "/project/9",
+    date: "NOV 2024",
+  },
+  {
     id: "8",
     emoji: "🤖",
     title: "Bast Captcha, Automation Defense",
