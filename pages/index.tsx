@@ -15,7 +15,7 @@ const drops: DropCard[] = [
   {
     id: "9",
     emoji: "🎊",
-    title: "BCAD’s Collected Adventure Drawings",
+    title: "BCAD's Collected Adventure Drawings",
     description: "Prove to me that you are a bot",
     image: "/drops/drop9.png",
     link: "/project/9",
@@ -110,20 +110,22 @@ export default function Home() {
       <main className="min-h-screen p-8 bg-white">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {drops.map((drop) => (
-            <Link href={drop.link} key={drop.id}>
+            <Link href={drop.link} key={drop.id} passHref>
               <div className="group cursor-pointer">
+                <div className="flex justify-between mb-2">
+                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono">
+                    #{drop.id}
+                  </div>
+                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono">
+                    {drop.date}
+                  </div>
+                </div>
                 <div className="relative aspect-video overflow-hidden">
                   <img
                     src={drop.image}
                     alt={drop.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-sm font-mono">
-                    #{drop.id}
-                  </div>
-                  <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-mono">
-                    {drop.date}
-                  </div>
                 </div>
                 <div className="mt-4">
                   <h2 className="text-2xl font-mono font-bold">
