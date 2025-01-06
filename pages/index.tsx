@@ -16,7 +16,7 @@ const drops: DropCard[] = [
     id: "9",
     emoji: "🎊",
     title: "BCAD's Collected Adventure Drawings",
-    description: "Prove to me that you are a bot",
+    description: "Presenting you our 108 special memories of the past year",
     image: "/drops/drop9.png",
     link: "/project/9",
     date: "Jan 2025",
@@ -28,7 +28,7 @@ const drops: DropCard[] = [
     description: "Prove to me that you are a bot",
     image: "/drops/drop8.png",
     link: "/project/8",
-    date: "NOV 2023",
+    date: "Nov 2023",
   },
   {
     id: "7",
@@ -37,7 +37,7 @@ const drops: DropCard[] = [
     description: "Emotional Intelligence Board Game",
     image: "/drops/drop7.png",
     link: "/project/7",
-    date: "NOV 2024",
+    date: "June 2023",
   },
   {
     id: "6",
@@ -46,7 +46,7 @@ const drops: DropCard[] = [
     description: "Internet black market in Bombay Beach",
     image: "/drops/drop6.png",
     link: "/project/6",
-    date: "OCT 2024",
+    date: "Apr 2023",
   },
   {
     id: "5",
@@ -55,7 +55,7 @@ const drops: DropCard[] = [
     description: "Measuring the collective emotional intelligence of crowds",
     image: "/drops/drop5.png",
     link: "/project/5",
-    date: "OCT 2024",
+    date: "Mar 2023",
   },
   {
     id: "4",
@@ -64,7 +64,7 @@ const drops: DropCard[] = [
     description: "Exploring the spread of advertising through neural networks",
     image: "/drops/drop4.jpg",
     link: "/project/4",
-    date: "SEP 2024",
+    date: "Feb 2023",
   },
   {
     id: "3",
@@ -73,7 +73,7 @@ const drops: DropCard[] = [
     description: "AI-powered divination and fortune telling",
     image: "/drops/drop3.png",
     link: "/project/3",
-    date: "SEP 2024",
+    date: "Feb 2023",
   },
   {
     id: "2",
@@ -83,7 +83,7 @@ const drops: DropCard[] = [
       "When algorithms meet cuisine - the intersection of code and cooking",
     image: "/drops/drop2/drop2.png",
     link: "/project/2",
-    date: "AUG 2024",
+    date: "Feb 2023",
   },
   {
     id: "1",
@@ -92,7 +92,7 @@ const drops: DropCard[] = [
     description: "TRIP: A journey through biochemical creativity",
     image: "/drops/drop1.png",
     link: "/project/1",
-    date: "AUG 2024",
+    date: "Jan 2023",
   },
 ];
 
@@ -114,13 +114,13 @@ export default function Home() {
               <div className="group cursor-pointer">
                 <div className="flex justify-between mb-2">
                   <div className="bg-white px-3 py-1 rounded-full text-sm font-mono border border-black">
-                    #{drop.id}
+                    #{drop.id} {drop.emoji}
                   </div>
                   <div className="bg-white px-3 py-1 rounded-full text-sm font-mono font-bold">
                     {drop.date}
                   </div>
                 </div>
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden rounded-lg border border-black border-2">
                   <img
                     src={drop.image}
                     alt={drop.title}
@@ -128,10 +128,10 @@ export default function Home() {
                   />
                 </div>
                 <div className="mt-4">
-                  <h2 className="text-2xl font-mono font-bold">
-                    {drop.emoji} {drop.title}
+                  <h2 className="text-xl font-mono font-bold tracking-tighter">
+                    {drop.title}
                   </h2>
-                  <p className="text-gray-600 mt-2 font-mono">
+                  <p className="text-gray-600 mt-2 font-mono tracking-tighter">
                     {drop.description}
                   </p>
                 </div>
