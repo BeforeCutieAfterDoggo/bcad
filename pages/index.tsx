@@ -9,6 +9,7 @@ interface DropCard {
   image: string;
   link: string;
   date: string;
+  tags: string[];
 }
 
 const drops: DropCard[] = [
@@ -20,6 +21,7 @@ const drops: DropCard[] = [
     image: "/drops/drop9.png",
     link: "/project/9",
     date: "Jan 2025",
+    tags: ["Art", "Live"],
   },
   {
     id: "8",
@@ -29,6 +31,7 @@ const drops: DropCard[] = [
     image: "/drops/drop8.png",
     link: "/project/8",
     date: "Nov 2023",
+    tags: ["Art", "Expired"],
   },
   {
     id: "7",
@@ -38,6 +41,7 @@ const drops: DropCard[] = [
     image: "/drops/drop7.png",
     link: "/project/7",
     date: "June 2023",
+    tags: ["Art", "Live"],
   },
   {
     id: "6",
@@ -47,6 +51,7 @@ const drops: DropCard[] = [
     image: "/drops/drop6.png",
     link: "/project/6",
     date: "Apr 2023",
+    tags: ["Art", "Expired"],
   },
   {
     id: "5",
@@ -56,6 +61,7 @@ const drops: DropCard[] = [
     image: "/drops/drop5.png",
     link: "/project/5",
     date: "Mar 2023",
+    tags: ["Tech", "Live"],
   },
   {
     id: "4",
@@ -65,6 +71,7 @@ const drops: DropCard[] = [
     image: "/drops/drop4.jpg",
     link: "/project/4",
     date: "Feb 2023",
+    tags: ["Tech", "Expired"],
   },
   {
     id: "3",
@@ -74,6 +81,7 @@ const drops: DropCard[] = [
     image: "/drops/drop3.png",
     link: "/project/3",
     date: "Feb 2023",
+    tags: ["Tech", "Expired"],
   },
   {
     id: "2",
@@ -84,6 +92,7 @@ const drops: DropCard[] = [
     image: "/drops/drop2/drop2.png",
     link: "/project/2",
     date: "Feb 2023",
+    tags: ["Tech", "Live"],
   },
   {
     id: "1",
@@ -93,8 +102,16 @@ const drops: DropCard[] = [
     image: "/drops/drop1.png",
     link: "/project/1",
     date: "Jan 2023",
+    tags: ["Art", "Live"],
   },
 ];
+
+const tagColors: Record<string, string> = {
+  Art: "bg-pink-100",
+  Live: "bg-green-100",
+  Tech: "bg-blue-100",
+  Expired: "bg-gray-100",
+};
 
 export default function Home() {
   return (
@@ -113,8 +130,18 @@ export default function Home() {
             <Link href={drop.link} key={drop.id} passHref>
               <div className="group cursor-pointer">
                 <div className="flex justify-between mb-2">
-                  <div className="bg-white px-3 py-1 rounded-full text-sm font-mono border border-black">
-                    #{drop.id} {drop.emoji}
+                  <div className="flex gap-2 items-center">
+                    <div className="bg-white px-3 py-1 rounded-full text-sm font-mono border border-black">
+                      #{drop.id} {drop.emoji}
+                    </div>
+                    {drop.tags.map((tag, index) => (
+                      <div
+                        key={index}
+                        className={`${tagColors[tag]} px-3 py-1 rounded-full text-sm font-mono border border-black`}
+                      >
+                        {tag}
+                      </div>
+                    ))}
                   </div>
                   <div className="bg-white px-3 py-1 rounded-full text-sm font-mono font-bold">
                     {drop.date}
