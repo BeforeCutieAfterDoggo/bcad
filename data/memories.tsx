@@ -3,7 +3,7 @@ export interface Memory {
   title: string;
   content: string;
   location?: string;
-  link?: string;
+  links?: string[];
   tags: string[];
 }
 
@@ -12,9 +12,9 @@ export const memories: Memory[] = [
     id: 1,
     title: "Chiang Mai Flea Market",
     content:
-      "We found a great flea market north of the Nimman area in Chiang Mai. Tons of cool antiques, dishes, and random junk for sale. We bought a bunch of dishes for some reason and got them all back safely to the US. Doggo passed on a really cool stone fly that he still thinks about sometimes.",
+      "We found a great flea market north of the Nimman area in Chiang Mai (Right next to the Tribal VILLAGE MUSEUM). Tons of cool antiques, dishes, and random junk for sale. We bought a bunch of dishes for some reason and got them all back safely to the US. Doggo passed on a really cool stone fly that he still thinks about sometimes.",
     location:
-      "159 1366 Tambon Chang Phueak, Mueang Chiang Mai District, Chiang Mai 50300, Thailand",
+      "Tribal VILLAGE MUSEUM, RXCF+28M, Chang Phueak, Mueang Chiang Mai District, Chiang Mai 50300, Thailand",
     tags: ["Shopping", "Travel", "Thailand", "Antiques", "Market"],
   },
   {
@@ -22,8 +22,7 @@ export const memories: Memory[] = [
     title: "Fountain of Youth Flea Market",
     content:
       "We went with Bodhi and Rachel to a flea market at Fountain of Youth hot springs. Tons of retirees dumping cool stuff for cheap. We got pillows, blankets, camping gear, foam rollers, dishes, and so much more for the new house.",
-    location:
-      "159 1366 Tambon Chang Phueak, Mueang Chiang Mai District, Chiang Mai 50300, Thailand",
+    location: "Fountain of Youth Spa RV Resort, 1500 Spa Rd, Niland, CA 92257",
     tags: ["Shopping", "Home", "Friends", "Market"],
   },
   {
@@ -32,6 +31,8 @@ export const memories: Memory[] = [
     content:
       "One of our first street food experiences in Thailand at a night market near the university. A huge, delicious plate of crispy pork and kale with rice and egg for about $1.50 USD. Can't be beat.",
     tags: ["Food", "Travel", "Thailand", "Street Food", "Market", "Budget"],
+    location:
+      "Rincome night market, RX38+3H Chiang Mai, Mueang Chiang Mai District, Chiang Mai, Thailand",
   },
   {
     id: 4,
@@ -39,6 +40,10 @@ export const memories: Memory[] = [
     content:
       "We got some amazing things from indie creators from China - a deck of cards with staples of modern urban millenial life with a connection/storytelling game, and a feminist calendar. Doggo uses the Slice of Era deck in his tarot readings now.",
     tags: ["Shopping", "Art", "Games", "China"],
+    links: [
+      "https://kate-chen.itch.io/slice-of-era",
+      "https://tuicashier.youzan.com/pay/wscgoods_order?scan=1&activity=none&from=kdt&qr=directgoods_3339046568&shopAutoEnter=1&alias=3npknxihpn9k7y6",
+    ],
   },
   {
     id: 5,
@@ -46,6 +51,11 @@ export const memories: Memory[] = [
     content:
       " Cutie was messaged an old friend she hasn't seen since leaving China randomly, we were all in Virginia. We had an amazing day together in Williamsburg. We saw the governor's mansion, saw synths in a music museum, and tasted mead and honey at a meadery.",
     tags: ["Friends", "Travel", "Virginia", "Music", "Food", "Adventure"],
+    links: [
+      "https://www.colonialwilliamsburg.org/",
+      "https://www.silverhandmeadery.com/",
+      "https://www.virginiamusicalmuseum.com/",
+    ],
   },
   {
     id: 6,
@@ -74,6 +84,9 @@ export const memories: Memory[] = [
     content:
       "We had a nice spa day together at the Bali Traditional Spa in Ubud. Highlight was a bathtub full of flower petals at the end for the two of us.",
     tags: ["Spa", "Wellness", "Bali", "Date", "Relaxing"],
+    links: ["https://ubudtraditionalspa.com/"],
+    location:
+      "Ubud Traditional Spa,Jalan Rsi Markandya I Payogan, Kedewatan, Kec. Gianyar, Kabupaten Gianyar, Bali 80571, Indonesia",
   },
   {
     id: 10,
@@ -88,6 +101,8 @@ export const memories: Memory[] = [
     content:
       "We took a long car ride down to the white sand beaches of Denpassar. We played in the surf together and felt so carefree. We are definitely water creatures.",
     tags: ["Beach", "Nature", "Bali", "Adventure", "Date"],
+    location:
+      "Double Six Beach,Legian, Jl. Double Six, Seminyak, Kec. Kuta, Kabupaten Badung, Bali, Indonesia",
   },
   {
     id: 12,
@@ -102,6 +117,8 @@ export const memories: Memory[] = [
     content:
       "Took a trip to see the lights at the Botannical Gardens in Richmond. Doggo hasn't been since he was a kid. We saw a Pikachu, a giant parrot, and about 5 minutes of snow!",
     tags: ["Art", "Nature", "Virginia", "Date", "Night"],
+    location:
+      "Lewis Ginter Botanical Garden, 1800 Lakeside Ave, Henrico, VA 23228",
   },
   {
     id: 14,
@@ -116,6 +133,8 @@ export const memories: Memory[] = [
     content:
       "Our stress relief from the doomed startup in Berkeley. We went to Victory Point, drank beers, and learned games like *Ship game* and Quest for El Dorado.",
     tags: ["Games", "Berkeley", "Date", "Fun"],
+    location:
+      "Victory Point Cafe, 1797 Shattuck Ave. Ste A, Berkeley, CA 94709",
   },
   {
     id: 16,
@@ -130,6 +149,7 @@ export const memories: Memory[] = [
     content:
       "We asked people to trade a piece of knowledge for a piece of Obsidian at the manifest night market. We drove 3 hours to the north and back the night before to collect Obsidian on *something* road because we couldn't afford the stuff at the crystal shop. That's commitment to the bit.",
     tags: ["Market", "Adventure", "Community", "Night"],
+    location: "Rose Garden Inn, 2740 Telegraph Ave, Berkeley, CA 94705",
   },
   {
     id: 18,
@@ -151,6 +171,8 @@ export const memories: Memory[] = [
     content:
       "We went to a cat cafe in the nimman area to hang out with dozen of round-faced kitties. Cutie had a shopping bag that created some incredible cat drama, and we saw a cat wearing a neck pillow. That's cozy.",
     tags: ["Cafe", "Pets", "Thailand", "Cozy"],
+    location:
+      "Mali Cat Cafe & Bar, 1 ถ.นิมมานเหมินทร์ Tambon Su Thep, Mueang Chiang Mai District, Chiang Mai 50200, Thailand",
   },
   {
     id: 21,
@@ -165,6 +187,7 @@ export const memories: Memory[] = [
     content:
       "One of the best photos of the year. We were at the farm in Ojai, and we put Sage in our noses because...benefits? Doggo thinks he sneezed his out.",
     tags: ["Fun", "Nature", "Friends", "California"],
+    location: "Full Circle Farm, 10239 Ojai Rd, Ojai, CA 93023",
   },
   {
     id: 23,
@@ -179,6 +202,7 @@ export const memories: Memory[] = [
     content:
       "Our favorite spot to work in Berkeley. Good coffee, a cozy semi-open indoor space with a long table for working, and a nice green space outside for cuddling afterwards.",
     tags: ["Coffee", "Work", "Berkeley", "Cozy", "Date"],
+    location: "The Hidden Cafe, 1250 Addison St Suite 111, Berkeley, CA 94702",
   },
   {
     id: 25,
@@ -214,6 +238,8 @@ export const memories: Memory[] = [
     content:
       "The mad geniuses put together an epic IRL puzzle hunt at LessOnline. We got the first set of puzzles as a team, and then joined a bigger team as we learned the puzzle boxes in the courtyard were just the beginning. The Map is Not the Territory, for sure.",
     tags: ["Games", "Community", "Adventure", "Learning"],
+    location: "Rose Garden Inn, 2740 Telegraph Ave, Berkeley, CA 94705",
+    links: ["https://less.online/"],
   },
   {
     id: 30,
@@ -221,6 +247,7 @@ export const memories: Memory[] = [
     content:
       "We went to our friend's permaculture farm in Ojai to spend the night. We didn't check the weather, wore shirts and t-shirts, and found out it was below freezing that night. Fortunately we skipped the tent and slept in the living room with the wood stove burning. Cozy.",
     tags: ["Nature", "Friends", "California", "Adventure", "Cozy"],
+    location: "Full Circle Farm, 10239 Ojai Rd, Ojai, CA 93023",
   },
   {
     id: 31,
@@ -242,6 +269,8 @@ export const memories: Memory[] = [
     content:
       "We spent an evening checking out the famous North Gate Jazz Club in Chiang Mai. We learned that it existed from an amazing local guidebook we randomly found at a book store. Amazing music from amazing local musicians.",
     tags: ["Music", "Thailand", "Night", "Date"],
+    location:
+      "The North Gate Jazz Co-Op, 91/1-2, Sri Poom Rd, Si Phum, Mueang Chiang Mai District, Chiang Mai 50200, Thailand",
   },
   {
     id: 34,
@@ -256,6 +285,8 @@ export const memories: Memory[] = [
     content:
       "Cutie found bags galore in Thailand. Round bags, coconut bags, small bags, big bags, and multicolor bags. Most of them broke pretty quickly, we do know a little something about bagholding.",
     tags: ["Shopping", "Thailand", "Fun"],
+    location:
+      "กุ่ยฮวด (เครื่องสาน), 268, 270 Chang Moi Rd, Tambon Si Phum, อำเภอเมือง Chiang Mai 50300, Thailand",
   },
   {
     id: 36,
@@ -270,6 +301,8 @@ export const memories: Memory[] = [
     content:
       "We took a daytrip to the Cocoon Spa in southern Chiang Mai. The group did a yoga and breathwork session to prepare for the open air ice bath. Doggo only did a minute or so but Cutie did the full three minutes like a champ.",
     tags: ["Wellness", "Thailand", "Adventure", "Spa"],
+    location:
+      "The Cocoon Sauna & Ice bath, Unnamed Road, Hang Dong, Hang Dong District, Chiang Mai 50230, Thailand",
   },
   {
     id: 38,
@@ -298,6 +331,8 @@ export const memories: Memory[] = [
     content:
       "We only had one real day for tourism in Bangkok, and we decided to go the aquarium. It was in the basement of one of Bangkok's many giant shopping malls. Lots of tropical fish we'd never seen since Thailand is near the reefs, and a tunnel with sharks and manta rays.",
     tags: ["Nature", "Thailand", "Adventure", "Date"],
+    location:
+      "SEA LIFE Bangkok Ocean World, ชั้น บี1-บี2 สยามพารากอน 991 Rama I Rd, Pathum Wan, Bangkok 10330, Thailand",
   },
   {
     id: 42,
@@ -305,6 +340,8 @@ export const memories: Memory[] = [
     content:
       "Cutie wanted to try Paradai chocolate since she heard it was amazing. The main store was closed, so we went to a smaller store. They were cash only and we were out of cash. We had reservations elswhere coming up soon, so Doggo did a heroic run in the heat up and down the block to find a working ATM, and got back just in time. The chocolate was incredible, we got bonbons, bars, and a cold drinking chocolate.",
     tags: ["Food", "Thailand", "Adventure", "Shopping"],
+    location:
+      "PARADAi Craft Chocolate & Cafe Ratchayothin, 1656 Phahonyothin Rd, จันทรเกษม Chatuchak, Bangkok 10900, Thailand",
   },
   {
     id: 43,
@@ -312,6 +349,7 @@ export const memories: Memory[] = [
     content:
       "We've become ice cream snobs and tend to be unimpressed with most ice cream. The Gelato Lab in Berkeley was one that was actually worth going back to. Perfect texture, great flavors, and you can tell it's made with high quality ingredients.",
     tags: ["Food", "Berkeley", "Ice Cream", "Date"],
+    location: "Caravaggio Gelato Lab, 1797 Shattuck Ave., Berkeley, CA 94709",
   },
   {
     id: 44,
@@ -326,6 +364,7 @@ export const memories: Memory[] = [
     content:
       "One of our favorite things to do at home is to make trips to swim in the Florida springs. The closest one to home is Wekiva Springs. We pronounce it Wehkee-Wa, it's a lot more fun to say that way. Doggo carries cutie like an Otter in the cold water. (bars)",
     tags: ["Nature", "Florida", "Adventure", "Date", "Swimming"],
+    location: "Wekiwa Springs State Park, 1800 Wekiwa Cir, Apopka, FL 32712",
   },
   {
     id: 46,
@@ -333,6 +372,8 @@ export const memories: Memory[] = [
     content:
       "The plant plug in Orlando is Growing Together nursery, near Blue Springs to the north. We found it randomly last year, and started our gardening adventure with the plants we bought there, and we got another round this year. The plants from there seem to consistently thrive with very little maintinance. 🌱",
     tags: ["Nature", "Shopping", "Florida", "Home", "Plants"],
+    location:
+      "Growing Together Nursery LLC, 215 N Sparkman Ave, Orange City, FL 32763",
   },
   {
     id: 47,
@@ -340,6 +381,8 @@ export const memories: Memory[] = [
     content:
       "Our favorite cafe in Chiang Mai was Self Cafe, a short walk from the breakfast venue. They make fancy fermented coffee drinks (though the one Cutie wanted most was always sold out), a good working vibe, and consistently good music. (rare for a coffee place)",
     tags: ["Coffee", "Thailand", "Work", "Music"],
+    location:
+      "SELF, 9 Charoen Prathet Rd, Tambon Chang Moi, Mueang Chiang Mai District, Chiang Mai 50100, Thailand",
   },
   {
     id: 48,
@@ -347,6 +390,8 @@ export const memories: Memory[] = [
     content:
       "Edge City Lanna was a different adventure every day, but it almost always started with breakfast with friends at Chef's Together. A delicious omelette, baked potatoes and spinach, a plate of raw vegetables (rare to find in Thailand), and a bit of tropical fruit.",
     tags: ["Food", "Thailand", "Community", "Friends"],
+    location:
+      "Chef's Together by Aod & Dan, 33 12 Charoen Prathet Rd, Tambon Chang Khlan, เมือง Chiang Mai 50100, Thailand",
   },
   {
     id: 49,
@@ -354,6 +399,8 @@ export const memories: Memory[] = [
     content:
       "Cutie bought a whole new wardrobe of handmade indigo dye pattern clothes from a shop at the Coconut Market in Thailand. Cheap and stylish, she constantly gets compliments on them.",
     tags: ["Shopping", "Thailand", "Market", "Fashion"],
+    location:
+      "Coconut Market, 94 Soi Ban Tong 2 Mu 3, Fa Ham, Mueang Chiang Mai District, Chiang Mai 50000, Thailand",
   },
   {
     id: 50,
@@ -361,6 +408,8 @@ export const memories: Memory[] = [
     content:
       "Handmade jewelry with actual sealed flowers. Cutie bought a red flower necklace for mom's Christmas present and a pair of gorgeous orchid earrings for herself. The flowers are sealed in resin, and the jewelry is made by a local female artist in ROC Ban Boran (Nature to Treasure), Chiang Mai.",
     tags: ["Shopping", "Thailand", "Art", "Gifts"],
+    location:
+      "Roc Ban Boran, 95 Charoen Prathet Rd, Tambon Chang Khlan, Mueang Chiang Mai District, Chiang Mai 50100, Thailand",
   },
   {
     id: 51,
@@ -368,6 +417,8 @@ export const memories: Memory[] = [
     content:
       "We went with the art residency group to a place called Jen Moy. Despite there being hundreds of thai restaurants around, we went there because it comes up on Google Maps when you search 'Thai restaurant'. They had the best Crying Tiger in town with special sauce made of tamarind, and we went back several times.",
     tags: ["Food", "Thailand", "Restaurant", "Friends"],
+    location:
+      "Jen Moy(คอแห้ง) Local Thai Restaurant, 138 Bumruang Rajd Rd, Wat Ket, Mueang Chiang Mai District, Chiang Mai 50000, Thailand",
   },
   {
     id: 52,
@@ -389,6 +440,7 @@ export const memories: Memory[] = [
     content:
       "The Berkeley Bowl grocery store in Berkeley is the best grocery store we've ever been do. All of the fresh produce you could ever want, stuff you'd never find in big chain grocery stores. Sushi grade fish, and delicious snacks and sauces. We miss it while we're living elsewhere.",
     tags: ["Shopping", "Food", "Berkeley", "Grocery"],
+    links: ["https://www.berkeleybowl.com/"],
   },
   {
     id: 55,
@@ -396,6 +448,7 @@ export const memories: Memory[] = [
     content:
       "The Wi Spa in LA was our overnight home several nights this year. It's a traditional Korean Spa with a mineral bath and dry saunas. Day passes are cheap and you can stay overnight for a small extra fee. Better than a hotel for a one night stop for sure.",
     tags: ["Spa", "LA", "Wellness", "Relaxing"],
+    links: ["https://wispausa.com/"],
   },
   {
     id: 56,
@@ -410,6 +463,7 @@ export const memories: Memory[] = [
     content:
       "Hanbat Shul Lung Tang in LA was one of our standout food experiences of the year. It's a beef soup served with rice and the traditional Korean fermented veggie sides. It's food that dares to be simple when restaurants serve fancier and louder food to try and get business.",
     tags: ["Food", "LA", "Restaurant", "Korean"],
+    location: "Hanbat Shul Lung Tang, 4163 5th St, Los Angeles, CA 90020",
   },
   {
     id: 58,
@@ -417,6 +471,7 @@ export const memories: Memory[] = [
     content:
       "Doggo took Cutie to n/naka for her birthday, their first trip to a Michelin Star restaurant together. Cutie wanted to go there in particular since it's headed by Niki Nakayama, a female head chef. The meal was incredible, every taste was amazing. Highlights were the appetizer plate, the nigiri course, and especially the sweet corn ice cream dessert.",
     tags: ["Food", "LA", "Date", "Special", "Birthday"],
+    links: ["https://n-naka.com//"],
   },
   {
     id: 59,
@@ -487,6 +542,7 @@ export const memories: Memory[] = [
     content:
       "At Manifest, there was a high profile startup pitch competition. We decided to play with this and hosted a dumb startup pitch competition. The fund was a 10 Chinese Yuan bill we found where we were sitting, and we passed it back and forth between the entreprenurs who showed up to pitch innovative businesses such as an inter-office gambling platform for tax CPAs.",
     tags: ["Fun", "Community", "Tech", "Party"],
+    links: ["https://www.manifest.is/"],
   },
   {
     id: 69,
@@ -501,6 +557,8 @@ export const memories: Memory[] = [
     content:
       "We took several business lunches while going through Berkeley Skydeck. Eating delicious dim sum and sichuanese in the bay to discuss strategy together is always better than doing it on an empty stomach.",
     tags: ["Food", "Work", "Berkeley", "Business"],
+    location:
+      "Fusion Delight, 699 Lewelling Blvd Unit 212, San Leandro, CA 94579",
   },
   {
     id: 71,
@@ -543,6 +601,7 @@ export const memories: Memory[] = [
     content:
       "After 16 months of work, we finished it! Our biggest project to date: a connection card game we'd been working on since mid 2023. Formerly known as EIBG, we came up with the new name the day before we printed. We got a small first print run made of 100 copies and sold...some of them. In October, our friend is opening a Chinese bookstore at a cool spot in the SF Chinatown. He is still renovating the space ahead of the opening, but is hosting community events already. He let us host a playtest of Introverse, and almost everyone who showed up had so much fun they bought a copy. It was very validating.",
     tags: ["Games", "Community", "Business", "Achievement", "San Francisco"],
+    links: ["https://www.eibg.one/", "https://unboundsf.co/"],
   },
   {
     id: 77,
@@ -550,13 +609,17 @@ export const memories: Memory[] = [
     content:
       "Doggo got bad food poisoning from some softshell crab in Chiang Mai. We didn't have insurance and were worried how much an ER visit was going to cost. The visit was fast and the total cost was only $12 for visit and medication. We were grateful for the care we received.",
     tags: ["Health", "Thailand", "Budget", "Medical"],
+    location:
+      "Maharaj Nakorn Chiang Mai Hospital, 110 Intrawarorot Road Soi 2, Si Phum, Mueang Chiang Mai District, Chiang Mai 50200, Thailand",
   },
   {
     id: 78,
-    title: "The best falafel at Hummu",
+    title: "The best falafel at Hummus",
     content:
       "Hummus is a mediterranean restaurant in Chiang Mai with 4.9 stars over thousands of reviews. Thailand is not where we expected to have the best Mediterranean food we've ever tasted. The most delicious falafel, hummus, curry shakshuka, homemade pickles, and pistachio yogurt desserts.",
     tags: ["Food", "Thailand", "Restaurant"],
+    location:
+      "Hummus Chiang Mai, 109, 1 Mun Mueang Rd, Sri Phum Subdistrict, Mueang Chiang Mai District, Chiang Mai 50200, Thailand",
   },
   {
     id: 79,
@@ -571,6 +634,8 @@ export const memories: Memory[] = [
     content:
       "The art residency group at Edge Lanna took a tourist day trip to see the famous northern temples. We saw the White Temple, the Black Temple, and the Blue Temple. We left wishes for each under in the metal tree at the White Temple. Doggo's favorite part was the sea of hands at the White Temple and the demon furniture at the Black Temple.",
     tags: ["Travel", "Thailand", "Art", "Culture", "Adventure"],
+    location:
+      "Wat Rong Khun - White Temple, Pa O Don Chai, Mueang Chiang Rai District, Chiang Rai 57000, Thailand",
   },
   {
     id: 81,
@@ -578,6 +643,7 @@ export const memories: Memory[] = [
     content:
       "Tara is a Feldenkrais practitioner that lives in the Chiang Mai hills. We went to her to each get a 1:1 appointment, then we came back for her group classes the next two Sundays. Group Feldenkrais is like super lazy yoga, or an active nap. It makes time pass very quickly.",
     tags: ["Wellness", "Thailand", "Learning", "Relaxing"],
+    links: ["https://somatic-movement-project.com/about-me/"],
   },
   {
     id: 82,
@@ -599,6 +665,10 @@ export const memories: Memory[] = [
     content:
       "Doggo really loves pizza. We didn't eat that much pizza this year, but we do have some favorite spots and memories. Shoutouts to Lazy Moon, Mary Angela's, Antica Pizzeria, and even the pizza party at Pluto before we left Mars.",
     tags: ["Food", "Pizza", "Travel", "Community"],
+    links: [
+      "https://www.antica-pizzeria.com/",
+      "https://www.lazymoonpizza.com/",
+    ],
   },
   {
     id: 85,
@@ -613,6 +683,7 @@ export const memories: Memory[] = [
     content:
       "We took a tourist day in Ubud to do a bunch of cool hippie things there. The standout was the sound healing session at the Pyramids of Chi. We think it was transformational even though we actually both just took really good naps. The smoothie bowls afterwards were delicious.",
     tags: ["Wellness", "Bali", "Spiritual", "Relaxing"],
+    links: ["https://ubud.pyramidsofchi.com/"],
   },
   {
     id: 87,
@@ -620,6 +691,8 @@ export const memories: Memory[] = [
     content:
       "We went to a meadery in the California wine country. This meadery is special because they both do beekeeping to make their honey, and also brew the mead with a champagne-like process. There was a big tree we sat underneath and spent the day with Doggo's parents, who happened to be in the area.",
     tags: ["Food", "California", "Family", "Date"],
+    location: "Heidrun Meadery,11925 CA-1, Point Reyes Station, CA 94956",
+    links: ["https://www.heidrunmeadery.com/"],
   },
   {
     id: 88,
@@ -627,6 +700,9 @@ export const memories: Memory[] = [
     content:
       "One of the weekly Edge Lanna dinners was at a place outside of Chiang Mai called Skugga Estates. They produce the most delicious single-origin coffee and chocolate. The coffee we bought there may be the best coffee Doggo has ever tasted.",
     tags: ["Coffee", "Food", "Thailand", "Community"],
+    location:
+      "Skugga Estate, บ้านสหกรณ์ 2 เลขที่ 29 รหัสไปรษณีย์ Ban Sa Ha Khon, Mae On District, Chiang Mai 50130, Thailand",
+    links: ["https://www.skuggalife.com/"],
   },
   {
     id: 89,
@@ -634,6 +710,10 @@ export const memories: Memory[] = [
     content:
       "Cutie found much joy this year in journaling and collecting stickers. She did journal & sticker shopping trips in Chiang Mai, got tons of cool stickers from Devcon, and completely filled her sticker book.",
     tags: ["Shopping", "Art", "Thailand", "Fun"],
+    links: [
+      "https://www.instagram.com/dibdee_binder/?hl=en",
+      "https://www.instagram.com/baskproject/?hl=en",
+    ],
   },
   {
     id: 90,
@@ -641,6 +721,7 @@ export const memories: Memory[] = [
     content:
       "The Florida Vintage Market is an event that runs in Orlando 3 times a month. It is the best vintage market Doggo has ever been to, and he found tons of cool and rare shirts there this year. 💧",
     tags: ["Shopping", "Fashion", "Florida", "Market"],
+    links: ["https://www.instagram.com/thefloridavintagemarket/?hl=en"],
   },
   {
     id: 91,
@@ -655,6 +736,7 @@ export const memories: Memory[] = [
     content:
       "Orlando punches above its weight for food because of all the international tourism. Our favorite place is an authentic Sichuanese place near Disney World called Chili Spot. Cauliflower dry pot, green beans, cumin lamb, chongqing chicken, and braised fish. 🤤",
     tags: ["Food", "Florida", "Restaurant", "Chinese"],
+    location: "ChiliSpot, 4646 S Kirkman Rd, Orlando, FL 32811",
   },
   {
     id: 93,
@@ -669,6 +751,8 @@ export const memories: Memory[] = [
     content:
       "Koko Kakigori is a new place that popped up in Orlando run by a friendly couple that serves shaved ice. Every part of it is homemade with fresh ingredients. Ube coconut, ichigo matcha, and starfruit yuzu were our favorites. We went there most sundays we were home for an ice cream date.",
     tags: ["Food", "Ice Cream", "Florida", "Date"],
+    location: "Koko Kakigori, 620 N Thornton Ave, Orlando, FL 32803",
+    links: ["https://kokokakigori.com/"],
   },
   {
     id: 95,
@@ -676,6 +760,7 @@ export const memories: Memory[] = [
     content:
       "Cutie was a little low on crypto conferences after ETHDenver, and we weren't expecting much from Devcon. It turned out to be way better than we expected, the ground floor area was super vibey, the food was delicious, and there were a lot more things to do than just crypto talk. Would go back.",
     tags: ["Tech", "Crypto", "Community", "Thailand"],
+    links: ["https://devcon.org/en/"],
   },
   {
     id: 96,
@@ -683,6 +768,7 @@ export const memories: Memory[] = [
     content:
       "We got a little taste of Edge City from the Edge Esmerelda hackathon, and decided to do the full month at Edge City Lanna. It was an amazing experience where every day we had great conversations, did interesting things, and hung out with good friends. Edge City is creating something really special for people.",
     tags: ["Community", "Thailand", "Learning", "Friends"],
+    links: ["https://www.edgecity.live/lanna"],
   },
   {
     id: 97,
@@ -760,6 +846,8 @@ export const memories: Memory[] = [
     content:
       "There was a restaurant right next to the breakfast venue in Thailand called Ancient Beef Thai Cuisine. Beef is fairly uncommon to eat in Thailand, and they made the best stewed beef dishes. A plate of beef with rice and veggies, or a noodle soup for $4-5. Every time we go out to eat in the US, we wish we were there instead.",
     tags: ["Food", "Thailand", "Restaurant", "Budget"],
+    location:
+      "Ancient Beef Thai Cuisine, 95 Charoen Prathet Rd, Chang Khlan Sub-district, Mueang Chiang Mai District, Chiang Mai 50100, Thailand",
   },
   {
     id: 108,

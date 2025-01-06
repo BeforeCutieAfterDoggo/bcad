@@ -151,7 +151,7 @@ export default function ProductPage() {
                 onClick={() => setShowAllTags(!showAllTags)}
                 className="px-3 py-1 rounded-full text-sm bg-gray-200 hover:bg-gray-300"
               >
-                {showAllTags ? 'Hide Tags' : 'View All Tags'}
+                {showAllTags ? "Hide Tags" : "View All Tags"}
               </button>
             </div>
 
@@ -224,6 +224,37 @@ export default function ProductPage() {
                   {selectedMemory.title}
                 </h2>
                 <p className="text-gray-600">{selectedMemory.content}</p>
+                {selectedMemory.location && (
+                  <p className="text-gray-600">
+                    Location:{" "}
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        selectedMemory.location
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      {selectedMemory.location}
+                    </a>
+                  </p>
+                )}
+                {selectedMemory.links && selectedMemory.links.length > 0 && (
+                  <div className="text-gray-600">
+                    {selectedMemory.links.map((link, index) => (
+                      <p key={index}>
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 underline"
+                        >
+                          Relevant Link {index + 1}
+                        </a>
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
