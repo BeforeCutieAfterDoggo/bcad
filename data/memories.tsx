@@ -601,7 +601,7 @@ export const memories: Memory[] = [
     content:
       "After 16 months of work, we finished it! Our biggest project to date: a connection card game we'd been working on since mid 2023. Formerly known as EIBG, we came up with the new name the day before we printed. We got a small first print run made of 100 copies and sold...some of them. In October, our friend is opening a Chinese bookstore at a cool spot in the SF Chinatown. He is still renovating the space ahead of the opening, but is hosting community events already. He let us host a playtest of Introverse, and almost everyone who showed up had so much fun they bought a copy. It was very validating.",
     tags: ["Games", "Community", "Business", "Achievement", "San Francisco"],
-    links: ["https://www.eibg.one/", "https://unboundsf.co/"],
+    links: ["https://bcad.gumroad.com/l/introverse?layout=profile", "https://unboundsf.co/"],
   },
   {
     id: 77,

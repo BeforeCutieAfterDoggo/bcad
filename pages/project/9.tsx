@@ -207,14 +207,14 @@ export default function ProductPage() {
         {/* Modal */}
         {selectedMemory && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6 relative">
+            <div className="bg-white rounded-lg max-w-2xl w-full p-6 relative max-h-[90vh] flex flex-col">
               <button
                 onClick={() => setSelectedMemory(null)}
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
               >
                 ✕
               </button>
-              <div className="space-y-4">
+              <div className="space-y-4 overflow-y-auto">
                 <img
                   src={`/drops/drop9/${selectedMemory.id}.png`}
                   alt={selectedMemory.title}
