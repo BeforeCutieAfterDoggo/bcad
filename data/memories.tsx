@@ -585,8 +585,8 @@ export const memories: Memory[] = [
     id: 74,
     title: "Nappu at Nap Dance",
     content:
-      "We found the best coffee in Chiang Mai at a place called The Coffee Club. It's a small chain with a bunch of locations, and the coffee was amazing. We went there every day for a long time.",
-    tags: ["Coffee", "Thailand", "Cozy"],
+      "Martian Charles made a pink bed installation called Nap Dance. He moved it to the center of the Mars Camp circle, since then there are many Martians spent time on that bed. It was so cozy.",
+    tags: ["Mars", "Cozy", "Art"],
   },
   {
     id: 75,
