@@ -84,57 +84,58 @@ const FloatingLand: React.FC = () => {
     land.receiveShadow = true;
     scene.add(land);
 
-    // Create realistic grass with individual blades
-    const grassGroup = new THREE.Group();
-    const grassBladeCount = 200; // Number of grass blades
-    const grassBlades: THREE.Mesh[] = [];
-    const grassPositions: {
+    // --- INSTANCED GRASS SYSTEM ---
+    const grassBladeCount = 60000;
+    const grassGeometry = new THREE.PlaneGeometry(0.03, 0.4);
+    const grassMaterial = new THREE.MeshLambertMaterial({
+      color: new THREE.Color().setHSL(0.28, 0.7, 0.32),
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const grassMesh = new THREE.InstancedMesh(
+      grassGeometry,
+      grassMaterial,
+      grassBladeCount
+    );
+    const dummy = new THREE.Object3D();
+    // Store per-blade data for animation
+    const bladeData: {
       x: number;
       z: number;
       height: number;
       phase: number;
+      yRot: number;
+      colorL: number;
     }[] = [];
-
     for (let i = 0; i < grassBladeCount; i++) {
-      // Create individual grass blade
-      const bladeHeight = 0.3 + Math.random() * 0.4; // Varying heights
-      const bladeWidth = 0.02 + Math.random() * 0.03;
-
-      const bladeGeometry = new THREE.PlaneGeometry(bladeWidth, bladeHeight);
-      const bladeMaterial = new THREE.MeshLambertMaterial({
-        color: new THREE.Color().setHSL(0.25, 0.6, 0.3 + Math.random() * 0.2), // Varying green shades
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.8,
-      });
-
-      const blade = new THREE.Mesh(bladeGeometry, bladeMaterial);
-
-      // Position grass blades randomly on the land surface
-      const x = (Math.random() - 0.5) * 7.5;
-      const z = (Math.random() - 0.5) * 5.5;
-      const y = 2.51 + bladeHeight / 2;
-
-      blade.position.set(x, y, z);
-      blade.castShadow = true;
-      blade.receiveShadow = true;
-
-      // Random rotation for natural look
-      blade.rotation.y = Math.random() * Math.PI * 2;
-      blade.rotation.z = (Math.random() - 0.5) * 0.2; // Slight tilt
-
-      grassBlades.push(blade);
-      grassPositions.push({
-        x: x,
-        z: z,
-        height: bladeHeight,
-        phase: Math.random() * Math.PI * 2, // Random phase for wave animation
-      });
-
-      grassGroup.add(blade);
+      // Randomize blade properties
+      const isTall = i % 20 === 0;
+      const height = isTall
+        ? 0.7 + Math.random() * 0.2
+        : 0.22 + Math.random() * 0.18;
+      const width = isTall
+        ? 0.05 + Math.random() * 0.02
+        : 0.025 + Math.random() * 0.02;
+      const x = (Math.random() - 0.5) * 8;
+      const z = (Math.random() - 0.5) * 6;
+      const yRot = Math.random() * Math.PI * 2;
+      const phase = Math.random() * Math.PI * 2;
+      const colorL = 0.28 + Math.random() * 0.18;
+      // Set up instance matrix
+      dummy.position.set(x, 0.5 + height / 2, z);
+      dummy.scale.set(width / 0.03, height / 0.4, 1);
+      dummy.rotation.set(0, yRot, 0);
+      dummy.updateMatrix();
+      grassMesh.setMatrixAt(i, dummy.matrix);
+      // Set up per-instance color (optional, for more variation)
+      if (grassMesh.instanceColor) {
+        grassMesh.setColorAt(i, new THREE.Color().setHSL(0.28, 0.7, colorL));
+      }
+      bladeData.push({ x, z, height, phase, yRot, colorL });
     }
-
-    scene.add(grassGroup);
+    // Instead of scene.add(grassMesh), do:
+    land.add(grassMesh);
 
     // Add some decorative elements on the land
     // Small trees
@@ -234,11 +235,49 @@ const FloatingLand: React.FC = () => {
 
       // Gentle floating animation for the land
       land.position.y = landInitialY + Math.sin(time * 0.5) * 0.3;
-      grass.position.y = land.position.y + 0.51;
+      // --- INSTANCED GRASS ANIMATION ---
+      for (let i = 0; i < grassBladeCount; i++) {
+        const { x, z, height, phase, yRot, colorL } = bladeData[i];
+        // Animate waving (rotation.z), not Y
+        const gust = Math.sin(time * 0.1) > 0.8 ? 2.2 : 1.0;
+        const wind =
+          Math.sin(time * 2 + phase + x * 0.5 + z * 0.5) * 0.22 * gust;
+        dummy.position.set(x, 0.5 + height / 2, z);
+        dummy.scale.set((height > 0.5 ? 0.05 : 0.025) / 0.03, height / 0.4, 1);
+        dummy.rotation.set(0, yRot, wind);
+        dummy.updateMatrix();
+        grassMesh.setMatrixAt(i, dummy.matrix);
+        // Optionally animate color (darker when bent)
+        if (grassMesh.instanceColor) {
+          grassMesh.setColorAt(
+            i,
+            new THREE.Color().setHSL(0.28, 0.7, colorL - Math.abs(wind) * 0.15)
+          );
+        }
+      }
+      grassMesh.instanceMatrix.needsUpdate = true;
+      if (grassMesh.instanceColor) grassMesh.instanceColor.needsUpdate = true;
+      // Animate dew and flowers to follow land
+      //   dewGroup.children.forEach((dew) => {
+      //     const mesh = dew as THREE.Mesh;
+      //     mesh.position.y =
+      //       land.position.y +
+      //       0.5 +
+      //       ((mesh.geometry as any).parameters.radius || 0.02) +
+      //       0.1;
+      //   });
+      //   flowerGroup.children.forEach((flower) => {
+      //     const mesh = flower as THREE.Mesh;
+      //     mesh.position.y =
+      //       land.position.y +
+      //       0.5 +
+      //       ((mesh.geometry as any).parameters.radius || 0.04) +
+      //       0.13;
+      //   });
 
       // Rotate the land slightly
       land.rotation.y = Math.sin(time * 0.2) * 0.1;
-      grass.rotation.y = land.rotation.y;
+      // --- GRASS ANIMATION CODE REMOVED ---
 
       // Animate particles
       const positions = particles.attributes.position.array as Float32Array;
