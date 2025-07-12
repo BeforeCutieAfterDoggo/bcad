@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const FloatingLand: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -14,6 +15,67 @@ const FloatingLand: React.FC = () => {
     // Scene setup
     const scene = new THREE.Scene();
     sceneRef.current = scene;
+
+    // --- SKY DOME GRADIENT (moved here for scope) ---
+    // Define gradient color stops for top and bottom at key times
+    const skyGradientStops = [
+      { t: 0.0, top: 0x0a0a2a, bottom: 0x1a237e }, // midnight
+      { t: 0.18, top: 0xffb347, bottom: 0xffccff }, // sunrise
+      { t: 0.25, top: 0xffe082, bottom: 0xfff3e0 }, // early morning
+      { t: 0.32, top: 0x87ceeb, bottom: 0xb3e5fc }, // blue morning
+      { t: 0.5, top: 0x87ceeb, bottom: 0xb3e5fc }, // midday
+      { t: 0.68, top: 0x81d4fa, bottom: 0x4fc3f7 }, // afternoon
+      { t: 0.75, top: 0xff7043, bottom: 0x6a1b9a }, // sunset
+      { t: 0.82, top: 0x6a1b9a, bottom: 0x311b92 }, // dusk
+      { t: 1.0, top: 0x0a0a2a, bottom: 0x1a237e }, // midnight
+    ];
+    function lerpHex(a: number, b: number, t: number) {
+      const ca = new THREE.Color(a),
+        cb = new THREE.Color(b);
+      return ca.lerp(cb, t).getHex();
+    }
+    function getGradientColors(stops: any[], t: number) {
+      for (let i = 1; i < stops.length; i++) {
+        if (t <= stops[i].t) {
+          const prev = stops[i - 1];
+          const next = stops[i];
+          const localT = (t - prev.t) / (next.t - prev.t);
+          return {
+            top: lerpHex(prev.top, next.top, localT),
+            bottom: lerpHex(prev.bottom, next.bottom, localT),
+          };
+        }
+      }
+      return {
+        top: stops[stops.length - 1].top,
+        bottom: stops[stops.length - 1].bottom,
+      };
+    }
+    // Create a large sphere for the sky dome
+    const skyGeo = new THREE.SphereGeometry(100, 32, 32);
+    const skyMat = new THREE.ShaderMaterial({
+      uniforms: {
+        topColor: { value: new THREE.Color(0x87ceeb) },
+        bottomColor: { value: new THREE.Color(0xb3e5fc) },
+      },
+      vertexShader: `varying vec3 vWorldPosition;
+        void main() {
+          vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+          vWorldPosition = worldPosition.xyz;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+      fragmentShader: `uniform vec3 topColor;
+        uniform vec3 bottomColor;
+        varying vec3 vWorldPosition;
+        void main() {
+          float h = normalize(vWorldPosition).y * 0.5 + 0.5;
+          gl_FragColor = vec4(mix(bottomColor, topColor, h), 1.0);
+        }`,
+      side: THREE.BackSide,
+      depthWrite: false,
+    });
+    const skyDome = new THREE.Mesh(skyGeo, skyMat);
+    scene.add(skyDome);
 
     // Camera setup
     const camera = new THREE.PerspectiveCamera(
@@ -51,7 +113,7 @@ const FloatingLand: React.FC = () => {
 
     // Time of day: 0 = midnight, 0.25 = sunrise, 0.5 = midday, 0.75 = sunset, 1 = midnight
     // Set to undefined for auto-animation, or a value 0-1 to test a specific time
-    let timeOfDay: number | undefined = undefined; // e.g. 0.25 for sunrise, 0.5 for midday, undefined for auto
+    let timeOfDay: number | undefined = 0.5; // e.g. 0.25 for sunrise, 0.5 for midday, undefined for auto
 
     // Helper to interpolate between two colors
     function lerpColor(a: THREE.Color, b: THREE.Color, t: number) {
@@ -125,15 +187,15 @@ const FloatingLand: React.FC = () => {
     sunLight.position.set(15, 15, 15);
     scene.add(sunLight);
 
-    // Create floating land
-    const landGeometry = new THREE.BoxGeometry(12, 1, 6);
+    // Create floating land (10x bigger)
+    const landGeometry = new THREE.BoxGeometry(32, 1, 16);
     const landMaterial = new THREE.MeshLambertMaterial({
       color: 0x8b4513, // Brown color for earth
       transparent: true,
       opacity: 0.9,
     });
     const land = new THREE.Mesh(landGeometry, landMaterial);
-    land.position.y = 2;
+    land.position.y = -3; // Lower the land
     land.castShadow = true;
     land.receiveShadow = true;
     scene.add(land);
@@ -171,8 +233,8 @@ const FloatingLand: React.FC = () => {
       const width = isTall
         ? 0.05 + Math.random() * 0.02
         : 0.025 + Math.random() * 0.02;
-      const x = (Math.random() - 0.5) * 12;
-      const z = (Math.random() - 0.5) * 6;
+      const x = (Math.random() - 0.5) * 32;
+      const z = (Math.random() - 0.5) * 16;
       const yRot = Math.random() * Math.PI * 2;
       const phase = Math.random() * Math.PI * 2;
       const colorL = 0.28 + Math.random() * 0.18;
@@ -192,46 +254,11 @@ const FloatingLand: React.FC = () => {
     land.add(grassMesh);
 
     // Add some decorative elements on the land
+    // Remove random trees and rocks
     // Small trees
-    for (let i = 0; i < 3; i++) {
-      const treeTrunkGeometry = new THREE.CylinderGeometry(0.2, 0.3, 1.5);
-      const treeTrunkMaterial = new THREE.MeshLambertMaterial({
-        color: 0x8b4513,
-      });
-      const treeTrunk = new THREE.Mesh(treeTrunkGeometry, treeTrunkMaterial);
-      treeTrunk.position.set(
-        (Math.random() - 0.5) * 6,
-        3.25,
-        (Math.random() - 0.5) * 4
-      );
-      treeTrunk.castShadow = true;
-      scene.add(treeTrunk);
-
-      const treeLeavesGeometry = new THREE.SphereGeometry(0.8);
-      const treeLeavesMaterial = new THREE.MeshLambertMaterial({
-        color: 0x228b22,
-      });
-      const treeLeaves = new THREE.Mesh(treeLeavesGeometry, treeLeavesMaterial);
-      treeLeaves.position.set(treeTrunk.position.x, 4.25, treeTrunk.position.z);
-      treeLeaves.castShadow = true;
-      scene.add(treeLeaves);
-    }
-
+    // for (let i = 0; i < 3; i++) { ... }
     // Add some rocks
-    for (let i = 0; i < 5; i++) {
-      const rockGeometry = new THREE.DodecahedronGeometry(
-        0.3 + Math.random() * 0.2
-      );
-      const rockMaterial = new THREE.MeshLambertMaterial({ color: 0x696969 });
-      const rock = new THREE.Mesh(rockGeometry, rockMaterial);
-      rock.position.set(
-        (Math.random() - 0.5) * 6,
-        2.5 + Math.random() * 0.5,
-        (Math.random() - 0.5) * 4
-      );
-      rock.castShadow = true;
-      scene.add(rock);
-    }
+    // for (let i = 0; i < 5; i++) { ... }
 
     // Add clouds in the background
     for (let i = 0; i < 8; i++) {
@@ -278,6 +305,77 @@ const FloatingLand: React.FC = () => {
 
     const particleSystem = new THREE.Points(particles, particleMaterial);
     scene.add(particleSystem);
+
+    // Load mango tree GLB and add to land
+    const loader = new GLTFLoader();
+    loader.load(
+      "/garden/mango_tree.glb",
+      (gltf) => {
+        const mangoTree = gltf.scene;
+        // Scale and position the tree on the land
+        mangoTree.scale.set(2, 2, 2); // Adjust as needed
+        mangoTree.position.set(0, 2, 0); // Move up (was 0.5)
+        land.add(mangoTree);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading mango tree:", error);
+      }
+    );
+
+    // Load marigold.glb once and place it in a corner
+    loader.load(
+      "/garden/marigold.glb",
+      (gltf) => {
+        const marigold = gltf.scene;
+        marigold.position.set(-10, 1, 5); // Near a corner of the land
+        marigold.scale.set(1, 1, 1);
+        land.add(marigold);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading marigold:", error);
+      }
+    );
+
+    // Load rose_bush.glb and place it in the right bottom corner
+    loader.load(
+      "/garden/rose_bush.glb",
+      (gltf) => {
+        const roseBush = gltf.scene;
+        console.log("Loaded rose_bush.glb:", roseBush);
+        roseBush.position.set(10, 0.5, 6); // Right bottom corner for 32x16 land
+        roseBush.scale.set(50, 50, 50);
+        roseBush.rotation.set(180, 270, 180); // Ensure upright orientation
+        // Remove the red wireframe box helper
+        // const helper = new THREE.Mesh(
+        //   new THREE.BoxGeometry(1, 1, 1),
+        //   new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+        // );
+        // helper.position.copy(roseBush.position);
+        // land.add(helper);
+        land.add(roseBush);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading rose bush:", error);
+      }
+    );
+
+    // Load caladium_plant.glb and place it next to the marigold
+    loader.load(
+      "/garden/caladium_plant.glb",
+      (gltf) => {
+        const caladium = gltf.scene;
+        caladium.position.set(-8, 0.5, 5); // Lowered and next to marigold
+        caladium.scale.set(0.05, 0.05, 0.05); // 2x smaller than before
+        land.add(caladium);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading caladium plant:", error);
+      }
+    );
 
     // Animation variables
     let time = 0;
@@ -356,7 +454,12 @@ const FloatingLand: React.FC = () => {
       const skyColor = getColorFromStops(skyStops, t);
       const sunColor = getColorFromStops(sunStops, t);
       const ambientColor = getColorFromStops(ambientStops, t);
-      renderer.setClearColor(skyColor, 1);
+      // --- SKY DOME GRADIENT ANIMATION ---
+      // Animate sky gradient
+      const grad = getGradientColors(skyGradientStops, t);
+      skyMat.uniforms.topColor.value.setHex(grad.top);
+      skyMat.uniforms.bottomColor.value.setHex(grad.bottom);
+      // Remove renderer.setClearColor(skyColor, 1); (sky dome now handles background)
       ambientLight.color = ambientColor;
       directionalLight.color = sunColor;
       sunLight.color = sunColor;
