@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 export default function ProductPage() {
   const [checked, setChecked] = useState(false);
   const router = useRouter();
@@ -78,7 +77,11 @@ export default function ProductPage() {
                     Soon)
                   </button>
                 </a> */}
-                <a target="_blank" rel="noreferrer" href="https://bcad.gumroad.com/l/introverse?layout=profile">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://bcad.gumroad.com/l/introverse?layout=profile"
+                >
                   <button className="mt-10 bg-[#05ce78] pb-2 text-black border border-black border-2 font-bold font-mono py-2 px-4 italic   mb-10">
                     📦 Get your physical copy Today!
                   </button>

@@ -1,9 +1,19 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { BoxHelper } from "three";
 
 const FloatingLand: React.FC = () => {
+  const [showRoseModal, setShowRoseModal] = useState(false);
+  const [roseHovered, setRoseHovered] = useState(false);
+  const [roseBushLoaded, setRoseBushLoaded] = useState(false);
+  const [redRoseLoaded, setRedRoseLoaded] = useState(false);
+  const roseBushRef = useRef<THREE.Object3D | null>(null);
+  const redRoseRef = useRef<THREE.Object3D | null>(null);
+  const modalCanvasRef = useRef<HTMLDivElement>(null);
+  const mainCameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const landRef = useRef<THREE.Mesh | null>(null);
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -84,6 +94,7 @@ const FloatingLand: React.FC = () => {
       0.1,
       1000
     );
+    mainCameraRef.current = camera;
     camera.position.set(0, 5, 10);
     camera.lookAt(0, 0, 0);
 
@@ -198,6 +209,7 @@ const FloatingLand: React.FC = () => {
     land.position.y = -3; // Lower the land
     land.castShadow = true;
     land.receiveShadow = true;
+    landRef.current = land;
     scene.add(land);
 
     // --- INSTANCED GRASS SYSTEM ---
@@ -314,8 +326,22 @@ const FloatingLand: React.FC = () => {
         const mangoTree = gltf.scene;
         // Scale and position the tree on the land
         mangoTree.scale.set(2, 2, 2); // Adjust as needed
-        mangoTree.position.set(0, 2, 0); // Move up (was 0.5)
+        mangoTree.position.set(5, 2, 0); // Move up (was 0.5)
         land.add(mangoTree);
+        // Load Jamaican cherry tree and place it next to the mango tree
+        loader.load(
+          "/garden/jamaican_cherry_tree.glb",
+          (gltf2) => {
+            const cherryTree = gltf2.scene;
+            cherryTree.scale.set(2, 2, 2); // Match mango tree scale
+            cherryTree.position.set(-5, 2, 0); // Place next to mango tree (x=3)
+            land.add(cherryTree);
+          },
+          undefined,
+          (error) => {
+            console.error("Error loading Jamaican cherry tree:", error);
+          }
+        );
       },
       undefined,
       (error) => {
@@ -343,18 +369,16 @@ const FloatingLand: React.FC = () => {
       "/garden/rose_bush.glb",
       (gltf) => {
         const roseBush = gltf.scene;
-        console.log("Loaded rose_bush.glb:", roseBush);
-        roseBush.position.set(10, 0.5, 6); // Right bottom corner for 32x16 land
+        roseBush.position.set(10, 0.5, 6); // Lowered y from 0.5 to 0.2
         roseBush.scale.set(50, 50, 50);
         roseBush.rotation.set(180, 270, 180); // Ensure upright orientation
-        // Remove the red wireframe box helper
-        // const helper = new THREE.Mesh(
-        //   new THREE.BoxGeometry(1, 1, 1),
-        //   new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
-        // );
-        // helper.position.copy(roseBush.position);
-        // land.add(helper);
+        roseBushRef.current = roseBush;
         land.add(roseBush);
+        setRoseBushLoaded(true); // Mark as loaded and ready for interaction
+        // Remove the yellow BoxHelper for the rose bush
+        // const boxHelper = new BoxHelper(roseBush, 0xffff00);
+        // boxHelper.rotation.copy(roseBush.rotation);
+        // land.add(boxHelper);
       },
       undefined,
       (error) => {
@@ -493,6 +517,210 @@ const FloatingLand: React.FC = () => {
     };
   }, []);
 
+  // Preload red rose GLB for faster modal opening
+  useEffect(() => {
+    const loader = new GLTFLoader();
+    loader.load(
+      "/garden/red_rose.glb",
+      (gltf) => {
+        redRoseRef.current = gltf.scene;
+        setRedRoseLoaded(true);
+      },
+      undefined,
+      (error) => {
+        console.error("Error preloading red rose:", error);
+      }
+    );
+  }, []);
+
+  // Raycaster for rose bush click and hover
+  useEffect(() => {
+    if (!rendererRef.current || !roseBushRef.current || !roseBushLoaded) return;
+    const renderer = rendererRef.current;
+    const dom = renderer.domElement;
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    function onClick(event: MouseEvent) {
+      const rect = dom.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(
+        mouse,
+        (sceneRef.current as any).children.find((c: any) => c.isCamera) ||
+          mainCameraRef.current
+      );
+      const intersects = raycaster.intersectObject(roseBushRef.current!, true);
+      console.log("Rose bush raycast intersects:", intersects);
+      if (intersects.length > 0) {
+        setShowRoseModal(true);
+      }
+    }
+    function onMouseMove(event: MouseEvent) {
+      const rect = dom.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(
+        mouse,
+        (sceneRef.current as any).children.find((c: any) => c.isCamera) ||
+          mainCameraRef.current
+      );
+      const intersects = raycaster.intersectObject(roseBushRef.current!, true);
+      const hitRose = intersects.length > 0;
+      if (hitRose) {
+        setRoseHovered(true);
+        dom.style.cursor = "pointer";
+      } else {
+        setRoseHovered(false);
+        dom.style.cursor = "";
+      }
+    }
+    dom.addEventListener("click", onClick);
+    dom.addEventListener("mousemove", onMouseMove);
+    return () => {
+      dom.removeEventListener("click", onClick);
+      dom.removeEventListener("mousemove", onMouseMove);
+      dom.style.cursor = "";
+    };
+  }, [roseBushLoaded]);
+
+  // Highlight rose bush on hover
+  useEffect(() => {
+    const roseBush = roseBushRef.current;
+    if (!roseBush) return;
+    roseBush.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((mat) => {
+            if ("emissive" in mat)
+              (mat.emissive as THREE.Color).set(
+                roseHovered ? 0x442222 : 0x000000
+              );
+            if ("emissiveIntensity" in mat)
+              mat.emissiveIntensity = roseHovered ? 0.2 : 0.0;
+          });
+        } else {
+          if ("emissive" in mesh.material)
+            (mesh.material.emissive as THREE.Color).set(
+              roseHovered ? 0x442222 : 0x000000
+            );
+          if ("emissiveIntensity" in mesh.material)
+            mesh.material.emissiveIntensity = roseHovered ? 0.5 : 0.0;
+        }
+      }
+    });
+  }, [roseHovered]);
+
+  // Modal for rotating red rose and stats
+  useEffect(() => {
+    if (!showRoseModal || !modalCanvasRef.current) return;
+
+    // Setup Three.js scene for modal
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+    camera.position.set(0, -0.5, 2.5); // Lowered camera y from 0 to -0.5
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(300, 300);
+    modalCanvasRef.current.innerHTML = "";
+    modalCanvasRef.current.appendChild(renderer.domElement);
+
+    // Lighting
+    const ambient = new THREE.AmbientLight(0xfff4e6, 0.6); // Warm ambient light
+    scene.add(ambient);
+
+    // Add directional light for better color visibility
+    const directional = new THREE.DirectionalLight(0xffe066, 0.8); // Warm yellow directional light
+    directional.position.set(5, 5, 5);
+    scene.add(directional);
+
+    // Add point light for additional illumination
+    const pointLight = new THREE.PointLight(0xffb347, 0.5); // Orange point light
+    pointLight.position.set(-3, 3, 3);
+    scene.add(pointLight);
+
+    // Use preloaded red rose if available
+    let roseMesh: THREE.Object3D | null = null;
+    if (redRoseRef.current) {
+      roseMesh = redRoseRef.current.clone();
+      roseMesh.scale.set(0.8, 0.8, 0.8);
+      roseMesh.position.set(0, -1.5, 0); // Lowered rose position
+
+      // Ensure materials are properly lit
+      roseMesh.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((mat) => {
+              if (
+                mat.type === "MeshStandardMaterial" ||
+                mat.type === "MeshPhysicalMaterial"
+              ) {
+                mat.needsUpdate = true;
+              }
+            });
+          } else {
+            if (
+              mesh.material.type === "MeshStandardMaterial" ||
+              mesh.material.type === "MeshPhysicalMaterial"
+            ) {
+              mesh.material.needsUpdate = true;
+            }
+          }
+        }
+      });
+
+      scene.add(roseMesh);
+    } else {
+      // Fallback: load if not preloaded
+      const loader = new GLTFLoader();
+      loader.load("/garden/red_rose.glb", (gltf) => {
+        roseMesh = gltf.scene;
+        roseMesh.scale.set(0.8, 0.8, 0.8);
+        roseMesh.position.set(0, -1.5, 0); // Lowered rose position
+
+        // Ensure materials are properly lit
+        roseMesh.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            if (Array.isArray(mesh.material)) {
+              mesh.material.forEach((mat) => {
+                if (
+                  mat.type === "MeshStandardMaterial" ||
+                  mat.type === "MeshPhysicalMaterial"
+                ) {
+                  mat.needsUpdate = true;
+                }
+              });
+            } else {
+              if (
+                mesh.material.type === "MeshStandardMaterial" ||
+                mesh.material.type === "MeshPhysicalMaterial"
+              ) {
+                mesh.material.needsUpdate = true;
+              }
+            }
+          }
+        });
+
+        scene.add(roseMesh);
+      });
+    }
+
+    // Animation loop
+    let frameId: number;
+    function animate() {
+      if (roseMesh) roseMesh.rotation.y += 0.01;
+      renderer.render(scene, camera);
+      frameId = requestAnimationFrame(animate);
+    }
+    animate();
+    return () => {
+      cancelAnimationFrame(frameId);
+      renderer.dispose();
+      modalCanvasRef.current && (modalCanvasRef.current.innerHTML = "");
+    };
+  }, [showRoseModal, redRoseLoaded]);
+
   return (
     <>
       <div
@@ -506,6 +734,81 @@ const FloatingLand: React.FC = () => {
           overflow: "hidden",
         }}
       />
+      {/* Rose Modal */}
+      {showRoseModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm">
+          <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg shadow-2xl p-2 sm:p-4 w-full max-w-sm max-h-screen border border-cyan-400/50 shadow-cyan-400/20 overflow-hidden">
+            {/* Glowing border effect */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-pink-500/20 blur-sm pointer-events-none"></div>
+            <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg p-3 sm:p-4 overflow-y-auto max-h-[90vh]">
+              {/* Close button with geeky styling */}
+              <button
+                className="absolute top-3 right-3 text-cyan-400 hover:text-red-400 text-xl font-mono bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded border border-cyan-400/30 transition-all duration-200 hover:border-red-400/50"
+                onClick={() => setShowRoseModal(false)}
+              >
+                [×]
+              </button>
+              {/* Header with tech styling */}
+              <div className="text-center mb-3">
+                <h2 className="text-xl font-bold mb-1 text-cyan-400 font-mono tracking-wider">
+                  &lt;RED_ROSE_BUSH&gt;
+                </h2>
+                <div className="text-xs text-gray-400 font-mono mb-1">
+                  [SYSTEM: FLORA_DATABASE_ACCESSED]
+                </div>
+              </div>
+              {/* 3D Canvas with geeky border */}
+              <div className="relative mb-3 flex justify-center">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-purple-500/20 rounded-lg blur-sm pointer-events-none"></div>
+                <div
+                  ref={modalCanvasRef}
+                  className="relative mx-auto rounded-lg border border-cyan-400/50 bg-gray-900"
+                  style={{
+                    width: "min(300px, 90vw)",
+                    height: "min(300px, 50vw)",
+                  }}
+                />
+              </div>
+              {/* Data panel with terminal styling */}
+              <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-600/50 font-mono text-xs">
+                <div className="text-cyan-400 mb-2">[DATA_ENTRY]</div>
+                <div className="space-y-1 text-gray-300">
+                  <div>
+                    <span className="text-green-400">Species:</span>{" "}
+                    <span className="text-yellow-400">Rosa × hybrida</span>
+                  </div>
+                  <div>
+                    <span className="text-green-400">Height:</span>{" "}
+                    <span className="text-yellow-400">~1.2m</span>
+                  </div>
+                  <div>
+                    <span className="text-green-400">Origin:</span>{" "}
+                    <span className="text-yellow-400">
+                      Cultivated worldwide
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-green-400">Status:</span>{" "}
+                    <span className="text-green-400">[ONLINE]</span>
+                  </div>
+                </div>
+                <div className="mt-2 text-gray-400 text-xs border-t border-gray-600/50 pt-2">
+                  <div className="text-purple-400">[NOTES]</div>
+                  <div className="text-gray-300 mt-1">
+                    This rose bush is prized for its vibrant color and classic
+                    fragrance. It thrives in well-drained soil and full sun.
+                  </div>
+                </div>
+              </div>
+              {/* Footer with tech details */}
+              <div className="text-center mt-3 text-xs text-gray-500 font-mono">
+                <div>SYSTEM: THREE.JS_RENDERER_v0.158.0</div>
+                <div>RENDER_TIME: {Date.now()}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div
         style={{
           position: "fixed",
