@@ -49,6 +49,60 @@ const FloatingLand: React.FC = () => {
     controls.autoRotate = false; // Disable auto-rotation initially
     controls.autoRotateSpeed = 0.5; // Speed if auto-rotation is enabled
 
+    // Time of day: 0 = midnight, 0.25 = sunrise, 0.5 = midday, 0.75 = sunset, 1 = midnight
+    // Set to undefined for auto-animation, or a value 0-1 to test a specific time
+    let timeOfDay: number | undefined = undefined; // e.g. 0.25 for sunrise, 0.5 for midday, undefined for auto
+
+    // Helper to interpolate between two colors
+    function lerpColor(a: THREE.Color, b: THREE.Color, t: number) {
+      return a.clone().lerp(b, t);
+    }
+
+    // Sky and light color stops
+    const skyStops = [
+      { t: 0.0, color: new THREE.Color(0x0a0a2a) }, // midnight
+      { t: 0.18, color: new THREE.Color(0xffb347) }, // sunrise
+      { t: 0.25, color: new THREE.Color(0xffccff) }, // early morning
+      { t: 0.32, color: new THREE.Color(0x87ceeb) }, // blue morning
+      { t: 0.5, color: new THREE.Color(0x87ceeb) }, // midday
+      { t: 0.68, color: new THREE.Color(0x87ceeb) }, // afternoon
+      { t: 0.75, color: new THREE.Color(0xff7043) }, // sunset
+      { t: 0.82, color: new THREE.Color(0x6a1b9a) }, // dusk
+      { t: 1.0, color: new THREE.Color(0x0a0a2a) }, // midnight
+    ];
+    const sunStops = [
+      { t: 0.0, color: new THREE.Color(0x222244) }, // midnight
+      { t: 0.18, color: new THREE.Color(0xffe066) }, // sunrise
+      { t: 0.25, color: new THREE.Color(0xffffff) }, // morning
+      { t: 0.5, color: new THREE.Color(0xffffff) }, // midday
+      { t: 0.75, color: new THREE.Color(0xffe066) }, // sunset
+      { t: 1.0, color: new THREE.Color(0x222244) }, // midnight
+    ];
+    const ambientStops = [
+      { t: 0.0, color: new THREE.Color(0x111122) },
+      { t: 0.18, color: new THREE.Color(0xffe0b2) },
+      { t: 0.25, color: new THREE.Color(0xffffff) },
+      { t: 0.5, color: new THREE.Color(0xffffff) },
+      { t: 0.75, color: new THREE.Color(0xffe0b2) },
+      { t: 1.0, color: new THREE.Color(0x111122) },
+    ];
+
+    // Helper to get interpolated color from stops
+    function getColorFromStops(
+      stops: { t: number; color: THREE.Color }[],
+      t: number
+    ) {
+      for (let i = 1; i < stops.length; i++) {
+        if (t <= stops[i].t) {
+          const prev = stops[i - 1];
+          const next = stops[i];
+          const localT = (t - prev.t) / (next.t - prev.t);
+          return lerpColor(prev.color, next.color, localT);
+        }
+      }
+      return stops[stops.length - 1].color;
+    }
+
     // Lighting setup for sunny day
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
@@ -291,6 +345,21 @@ const FloatingLand: React.FC = () => {
 
       // Update controls
       controls.update();
+
+      // --- SKY & LIGHT ANIMATION ---
+      // Animate or override time of day
+      let t: number =
+        typeof timeOfDay === "number" && !isNaN(timeOfDay)
+          ? timeOfDay
+          : (time * 0.01) % 1;
+      // Interpolate sky and light colors
+      const skyColor = getColorFromStops(skyStops, t);
+      const sunColor = getColorFromStops(sunStops, t);
+      const ambientColor = getColorFromStops(ambientStops, t);
+      renderer.setClearColor(skyColor, 1);
+      ambientLight.color = ambientColor;
+      directionalLight.color = sunColor;
+      sunLight.color = sunColor;
 
       renderer.render(scene, camera);
       animationIdRef.current = requestAnimationFrame(animate);
