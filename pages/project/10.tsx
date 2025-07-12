@@ -72,7 +72,7 @@ const FloatingLand: React.FC = () => {
     scene.add(sunLight);
 
     // Create floating land
-    const landGeometry = new THREE.BoxGeometry(8, 1, 6);
+    const landGeometry = new THREE.BoxGeometry(12, 1, 6);
     const landMaterial = new THREE.MeshLambertMaterial({
       color: 0x8b4513, // Brown color for earth
       transparent: true,
@@ -117,7 +117,7 @@ const FloatingLand: React.FC = () => {
       const width = isTall
         ? 0.05 + Math.random() * 0.02
         : 0.025 + Math.random() * 0.02;
-      const x = (Math.random() - 0.5) * 8;
+      const x = (Math.random() - 0.5) * 12;
       const z = (Math.random() - 0.5) * 6;
       const yRot = Math.random() * Math.PI * 2;
       const phase = Math.random() * Math.PI * 2;
