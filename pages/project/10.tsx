@@ -234,10 +234,10 @@ const FloatingLand: React.FC = () => {
     }
 
     // Lighting setup for sunny day
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Increased from 0.4 to 0.7
+    const ambientLight = new THREE.AmbientLight(0xffffff,1.2); // Increased from 0.4 to 0.7
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Increased from 1 to 1.5
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); // Increased from 1 to 1.5
     directionalLight.position.set(10, 20, 10);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 2048;
@@ -710,8 +710,8 @@ const FloatingLand: React.FC = () => {
             Math.cos(time * 0.4 + phase * 1.5) * 0.001;
 
           // Keep mist within bounds
-          if (mistPositions[i * 3 + 1] > 1.0) mistPositions[i * 3 + 1] = -1.5;
-          if (mistPositions[i * 3 + 1] < -1.5) mistPositions[i * 3 + 1] = 1.0;
+          if (mistPositions[i * 3 + 1] > 0.5) mistPositions[i * 3 + 1] = -1;
+          if (mistPositions[i * 3 + 1] < -1) mistPositions[i * 3 + 1] = 0.5;
 
           // Shimmering color changes
           const hue = (time * 0.1 + phase) % 1;
