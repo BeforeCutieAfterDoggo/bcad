@@ -3,14 +3,30 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { BoxHelper } from "three";
+import ObjectModal from "../../components/ObjectModal";
+import AnimatedClouds from "../../components/AnimatedClouds";
+import { roseInfo, mangoInfo, cherryInfo } from "../../data/data";
+
+const infoMap: Record<string, typeof roseInfo> = {
+  rose: roseInfo,
+  mango: mangoInfo,
+  cherry: cherryInfo,
+};
 
 const FloatingLand: React.FC = () => {
-  const [showRoseModal, setShowRoseModal] = useState(false);
-  const [roseHovered, setRoseHovered] = useState(false);
+  const [selectedObjectInfo, setSelectedObjectInfo] = useState<any | null>(
+    null
+  );
+  const [selectedPreloadedModel, setSelectedPreloadedModel] =
+    useState<THREE.Object3D | null>(null);
+  const [preloadedModels, setPreloadedModels] = useState<{
+    [key: string]: THREE.Object3D | null;
+  }>({});
   const [roseBushLoaded, setRoseBushLoaded] = useState(false);
-  const [redRoseLoaded, setRedRoseLoaded] = useState(false);
+  const [roseHovered, setRoseHovered] = useState(false);
   const roseBushRef = useRef<THREE.Object3D | null>(null);
-  const redRoseRef = useRef<THREE.Object3D | null>(null);
+  const mangoTreeRef = useRef<THREE.Object3D | null>(null);
+  const cherryTreeRef = useRef<THREE.Object3D | null>(null);
   const modalCanvasRef = useRef<HTMLDivElement>(null);
   const mainCameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const landRef = useRef<THREE.Mesh | null>(null);
@@ -18,6 +34,29 @@ const FloatingLand: React.FC = () => {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const animationIdRef = useRef<number | null>(null);
+  const [hoveredObjectId, setHoveredObjectId] = useState<string | null>(null);
+  const [cloudGroup, setCloudGroup] = useState<THREE.Group | null>(null);
+
+  // Preload all models for instant modal
+  useEffect(() => {
+    const loader = new GLTFLoader();
+    const infos = [roseInfo, mangoInfo, cherryInfo];
+    infos.forEach((info) => {
+      loader.load(
+        info.modelPath,
+        (gltf) => {
+          setPreloadedModels((prev) => ({
+            ...prev,
+            [info.modelPath]: gltf.scene,
+          }));
+        },
+        undefined,
+        (error) => {
+          console.error(`Error preloading model for ${info.title}:`, error);
+        }
+      );
+    });
+  }, []);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -30,13 +69,22 @@ const FloatingLand: React.FC = () => {
     // Define gradient color stops for top and bottom at key times
     const skyGradientStops = [
       { t: 0.0, top: 0x0a0a2a, bottom: 0x1a237e }, // midnight
-      { t: 0.18, top: 0xffb347, bottom: 0xffccff }, // sunrise
-      { t: 0.25, top: 0xffe082, bottom: 0xfff3e0 }, // early morning
-      { t: 0.32, top: 0x87ceeb, bottom: 0xb3e5fc }, // blue morning
-      { t: 0.5, top: 0x87ceeb, bottom: 0xb3e5fc }, // midday
-      { t: 0.68, top: 0x81d4fa, bottom: 0x4fc3f7 }, // afternoon
-      { t: 0.75, top: 0xff7043, bottom: 0x6a1b9a }, // sunset
-      { t: 0.82, top: 0x6a1b9a, bottom: 0x311b92 }, // dusk
+      { t: 0.15, top: 0x2c1810, bottom: 0x4a148c }, // pre-dawn
+      { t: 0.18, top: 0xff8a65, bottom: 0xffccbc }, // sunrise - warmer orange
+      { t: 0.22, top: 0xffb74d, bottom: 0xffe0b2 }, // early sunrise
+      { t: 0.25, top: 0xffd54f, bottom: 0xfff3e0 }, // golden hour
+      { t: 0.3, top: 0x81c784, bottom: 0xc8e6c9 }, // morning green-blue
+      { t: 0.35, top: 0x4fc3f7, bottom: 0xb3e5fc }, // morning blue
+      { t: 0.45, top: 0x29b6f6, bottom: 0x81d4fa }, // late morning
+      { t: 0.5, top: 0x1976d2, bottom: 0x64b5f6 }, // midday - deeper blue
+      { t: 0.55, top: 0x1565c0, bottom: 0x42a5f5 }, // early afternoon
+      { t: 0.65, top: 0x0d47a1, bottom: 0x1e88e5 }, // afternoon - rich blue
+      { t: 0.7, top: 0x0277bd, bottom: 0x29b6f6 }, // late afternoon
+      { t: 0.75, top: 0xff7043, bottom: 0xffab91 }, // sunset - vibrant orange
+      { t: 0.78, top: 0xe91e63, bottom: 0xf48fb1 }, // sunset - pink
+      { t: 0.82, top: 0x9c27b0, bottom: 0xce93d8 }, // dusk - purple
+      { t: 0.88, top: 0x673ab7, bottom: 0xb39ddb }, // late dusk
+      { t: 0.95, top: 0x3f51b5, bottom: 0x9fa8da }, // early night
       { t: 1.0, top: 0x0a0a2a, bottom: 0x1a237e }, // midnight
     ];
     function lerpHex(a: number, b: number, t: number) {
@@ -134,13 +182,22 @@ const FloatingLand: React.FC = () => {
     // Sky and light color stops
     const skyStops = [
       { t: 0.0, color: new THREE.Color(0x0a0a2a) }, // midnight
-      { t: 0.18, color: new THREE.Color(0xffb347) }, // sunrise
-      { t: 0.25, color: new THREE.Color(0xffccff) }, // early morning
-      { t: 0.32, color: new THREE.Color(0x87ceeb) }, // blue morning
-      { t: 0.5, color: new THREE.Color(0x87ceeb) }, // midday
-      { t: 0.68, color: new THREE.Color(0x87ceeb) }, // afternoon
-      { t: 0.75, color: new THREE.Color(0xff7043) }, // sunset
-      { t: 0.82, color: new THREE.Color(0x6a1b9a) }, // dusk
+      { t: 0.15, color: new THREE.Color(0x2c1810) }, // pre-dawn
+      { t: 0.18, color: new THREE.Color(0xff8a65) }, // sunrise - warmer orange
+      { t: 0.22, color: new THREE.Color(0xffb74d) }, // early sunrise
+      { t: 0.25, color: new THREE.Color(0xffd54f) }, // golden hour
+      { t: 0.3, color: new THREE.Color(0x81c784) }, // morning green-blue
+      { t: 0.35, color: new THREE.Color(0x4fc3f7) }, // morning blue
+      { t: 0.45, color: new THREE.Color(0x29b6f6) }, // late morning
+      { t: 0.5, color: new THREE.Color(0x1976d2) }, // midday - deeper blue
+      { t: 0.55, color: new THREE.Color(0x1565c0) }, // early afternoon
+      { t: 0.65, color: new THREE.Color(0x0d47a1) }, // afternoon - rich blue
+      { t: 0.7, color: new THREE.Color(0x0277bd) }, // late afternoon
+      { t: 0.75, color: new THREE.Color(0xff7043) }, // sunset - vibrant orange
+      { t: 0.78, color: new THREE.Color(0xe91e63) }, // sunset - pink
+      { t: 0.82, color: new THREE.Color(0x9c27b0) }, // dusk - purple
+      { t: 0.88, color: new THREE.Color(0x673ab7) }, // late dusk
+      { t: 0.95, color: new THREE.Color(0x3f51b5) }, // early night
       { t: 1.0, color: new THREE.Color(0x0a0a2a) }, // midnight
     ];
     const sunStops = [
@@ -177,10 +234,10 @@ const FloatingLand: React.FC = () => {
     }
 
     // Lighting setup for sunny day
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Increased from 0.4 to 0.7
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Increased from 1 to 1.5
     directionalLight.position.set(10, 20, 10);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 2048;
@@ -194,9 +251,23 @@ const FloatingLand: React.FC = () => {
     scene.add(directionalLight);
 
     // Add some warm sunlight
-    const sunLight = new THREE.PointLight(0xffd700, 0.8, 100);
+    const sunLight = new THREE.PointLight(0xffd700, 1.2, 100); // Increased from 0.8 to 1.2
     sunLight.position.set(15, 15, 15);
     scene.add(sunLight);
+
+    // Add additional fill lights for better plant illumination
+    const fillLight1 = new THREE.DirectionalLight(0xfff4e6, 0.6); // Warm fill light
+    fillLight1.position.set(-10, 15, 10);
+    scene.add(fillLight1);
+
+    const fillLight2 = new THREE.DirectionalLight(0xe6f4ff, 0.5); // Cool fill light
+    fillLight2.position.set(5, 10, -10);
+    scene.add(fillLight2);
+
+    // Add rim light for better plant definition
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    rimLight.position.set(0, 5, -15);
+    scene.add(rimLight);
 
     // Create floating land (10x bigger)
     const landGeometry = new THREE.BoxGeometry(32, 1, 16);
@@ -213,7 +284,7 @@ const FloatingLand: React.FC = () => {
     scene.add(land);
 
     // --- INSTANCED GRASS SYSTEM ---
-    const grassBladeCount = 60000;
+    const grassBladeCount = 120000;
     const grassGeometry = new THREE.PlaneGeometry(0.03, 0.4);
     const grassMaterial = new THREE.MeshLambertMaterial({
       color: new THREE.Color().setHSL(0.28, 0.7, 0.32),
@@ -272,22 +343,92 @@ const FloatingLand: React.FC = () => {
     // Add some rocks
     // for (let i = 0; i < 5; i++) { ... }
 
-    // Add clouds in the background
-    for (let i = 0; i < 8; i++) {
-      const cloudGeometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5);
+    // Add animated mathematical clouds
+    // Create animated clouds using mathematical functions
+    const cloudGroup = new THREE.Group();
+    scene.add(cloudGroup);
+    setCloudGroup(cloudGroup);
+
+    // Cloud generation parameters
+    const cloudCount = 12;
+    const clouds: {
+      mesh: THREE.Mesh;
+      speed: number;
+      amplitude: number;
+      phase: number;
+      baseY: number;
+      baseX: number;
+      baseZ: number;
+    }[] = [];
+
+    // Generate clouds using mathematical functions
+    for (let i = 0; i < cloudCount; i++) {
+      // Create cloud shape using multiple spheres
+      const cloudGeometry = new THREE.SphereGeometry(1, 8, 8);
       const cloudMaterial = new THREE.MeshLambertMaterial({
-        color: 0xffffff,
+        color: new THREE.Color().setHSL(0.6, 0.1, 0.95), // Light blue-white
         transparent: true,
         opacity: 0.8,
       });
-      const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
-      cloud.position.set(
-        (Math.random() - 0.5) * 40,
-        8 + Math.random() * 5,
-        -20 - Math.random() * 10
+
+      // Create main cloud body
+      const mainCloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+
+      // Add smaller spheres for cloud puffs
+      const puffCount = 3 + Math.floor(Math.random() * 4);
+      for (let j = 0; j < puffCount; j++) {
+        const puffGeometry = new THREE.SphereGeometry(
+          0.3 + Math.random() * 0.4,
+          6,
+          6
+        );
+        const puff = new THREE.Mesh(puffGeometry, cloudMaterial);
+
+        // Position puffs around main cloud
+        const angle = (j / puffCount) * Math.PI * 2;
+        const radius = 0.8 + Math.random() * 0.4;
+        puff.position.set(
+          Math.cos(angle) * radius,
+          Math.sin(angle) * radius * 0.5,
+          (Math.random() - 0.5) * 0.6
+        );
+        mainCloud.add(puff);
+      }
+
+      // Position clouds in a large dome around the scene
+      const angle = (i / cloudCount) * Math.PI * 2 + Math.random() * 0.5;
+      const radius = 40 + Math.random() * 20;
+      const baseY = 8 + Math.random() * 8; // Lowered from 15+10 to 8+8
+      const baseX = Math.cos(angle) * radius;
+      const baseZ = Math.sin(angle) * radius;
+
+      mainCloud.position.set(baseX, baseY, baseZ);
+      mainCloud.scale.set(
+        2 + Math.random() * 3,
+        1.5 + Math.random() * 2,
+        2 + Math.random() * 3
       );
-      scene.add(cloud);
+
+      // Random rotation for variety
+      mainCloud.rotation.y = Math.random() * Math.PI * 2;
+      mainCloud.rotation.x = Math.random() * 0.2 - 0.1;
+
+      cloudGroup.add(mainCloud);
+
+      // Store animation parameters
+      clouds.push({
+        mesh: mainCloud,
+        speed: 0.2 + Math.random() * 0.3,
+        amplitude: 2 + Math.random() * 3,
+        phase: Math.random() * Math.PI * 2,
+        baseY,
+        baseX,
+        baseZ,
+      });
     }
+
+    // Store clouds array for animation
+    (cloudGroup as any).clouds = clouds;
 
     // Add floating particles (dust motes in sunlight)
     const particleCount = 100;
@@ -318,6 +459,71 @@ const FloatingLand: React.FC = () => {
     const particleSystem = new THREE.Points(particles, particleMaterial);
     scene.add(particleSystem);
 
+    // Create magical mist around the ground
+    const mistParticleCount = 2000;
+    const mistParticles = new THREE.BufferGeometry();
+    const mistPositions = new Float32Array(mistParticleCount * 3);
+    const mistColors = new Float32Array(mistParticleCount * 3);
+    const mistSizes = new Float32Array(mistParticleCount);
+    const mistPhases = new Float32Array(mistParticleCount);
+
+    // Generate mist particles around the ground
+    for (let i = 0; i < mistParticleCount; i++) {
+      // Position mist around the land area
+      const x = (Math.random() - 0.5) * 40;
+      const y = Math.random() * 1.5 - 2.5; // Mist at land level (-3) with small range above
+      const z = (Math.random() - 0.5) * 25;
+
+      mistPositions[i * 3] = x;
+      mistPositions[i * 3 + 1] = y;
+      mistPositions[i * 3 + 2] = z;
+
+      // Random shimmering colors (pastel rainbow)
+      const hue = Math.random();
+      const color = new THREE.Color().setHSL(hue, 0.6, 0.8);
+      mistColors[i * 3] = color.r;
+      mistColors[i * 3 + 1] = color.g;
+      mistColors[i * 3 + 2] = color.b;
+
+      mistSizes[i] = 0.05 + Math.random() * 0.1;
+      mistPhases[i] = Math.random() * Math.PI * 2;
+    }
+
+    mistParticles.setAttribute(
+      "position",
+      new THREE.BufferAttribute(mistPositions, 3)
+    );
+    mistParticles.setAttribute(
+      "color",
+      new THREE.BufferAttribute(mistColors, 3)
+    );
+    mistParticles.setAttribute("size", new THREE.BufferAttribute(mistSizes, 1));
+
+    const mistMaterial = new THREE.PointsMaterial({
+      size: 0.1,
+      transparent: true,
+      opacity: 0.6,
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    const mistSystem = new THREE.Points(mistParticles, mistMaterial);
+    scene.add(mistSystem);
+
+    // Store mist data for animation and sky influence
+    const mistData = {
+      particles: mistParticles,
+      positions: mistPositions,
+      colors: mistColors,
+      phases: mistPhases,
+      system: mistSystem,
+      averageColor: new THREE.Color(0x87ceeb), // Default sky blue
+    };
+
+    // Store mist data for external access
+    (scene as any).mistData = mistData;
+
     // Load mango tree GLB and add to land
     const loader = new GLTFLoader();
     loader.load(
@@ -328,6 +534,7 @@ const FloatingLand: React.FC = () => {
         mangoTree.scale.set(2, 2, 2); // Adjust as needed
         mangoTree.position.set(5, 2, 0); // Move up (was 0.5)
         land.add(mangoTree);
+        mangoTreeRef.current = mangoTree;
         // Load Jamaican cherry tree and place it next to the mango tree
         loader.load(
           "/garden/jamaican_cherry_tree.glb",
@@ -336,6 +543,7 @@ const FloatingLand: React.FC = () => {
             cherryTree.scale.set(2, 2, 2); // Match mango tree scale
             cherryTree.position.set(-5, 2, 0); // Place next to mango tree (x=3)
             land.add(cherryTree);
+            cherryTreeRef.current = cherryTree;
           },
           undefined,
           (error) => {
@@ -383,6 +591,21 @@ const FloatingLand: React.FC = () => {
       undefined,
       (error) => {
         console.error("Error loading rose bush:", error);
+      }
+    );
+
+    // Load butterfly_plant.glb and place it to the left of the rose bush
+    loader.load(
+      "/garden/butterfly_plant.glb",
+      (gltf) => {
+        const butterflyPlant = gltf.scene;
+        butterflyPlant.position.set(5, 1.5, 6); // To the left of rose (x=5 vs 10), lower y position
+        butterflyPlant.scale.set(1, 1, 1); // Adjust scale as needed
+        land.add(butterflyPlant);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading butterfly plant:", error);
       }
     );
 
@@ -465,6 +688,58 @@ const FloatingLand: React.FC = () => {
       }
       particles.attributes.position.needsUpdate = true;
 
+      // Animate magical mist
+      const mistData = (scene as any).mistData;
+      if (mistData) {
+        const mistPositions = mistData.positions;
+        const mistColors = mistData.colors;
+        const mistPhases = mistData.phases;
+        let totalR = 0,
+          totalG = 0,
+          totalB = 0;
+
+        for (let i = 0; i < mistParticleCount; i++) {
+          const phase = mistPhases[i];
+
+          // Gentle floating movement
+          mistPositions[i * 3 + 1] += Math.sin(time * 0.5 + phase) * 0.002;
+
+          // Horizontal drift
+          mistPositions[i * 3] += Math.sin(time * 0.3 + phase * 2) * 0.001;
+          mistPositions[i * 3 + 2] +=
+            Math.cos(time * 0.4 + phase * 1.5) * 0.001;
+
+          // Keep mist within bounds
+          if (mistPositions[i * 3 + 1] > 1.0) mistPositions[i * 3 + 1] = -1.5;
+          if (mistPositions[i * 3 + 1] < -1.5) mistPositions[i * 3 + 1] = 1.0;
+
+          // Shimmering color changes
+          const hue = (time * 0.1 + phase) % 1;
+          const saturation = 0.6 + Math.sin(time * 0.5 + phase) * 0.2;
+          const lightness = 0.7 + Math.sin(time * 0.3 + phase * 3) * 0.2;
+
+          const color = new THREE.Color().setHSL(hue, saturation, lightness);
+          mistColors[i * 3] = color.r;
+          mistColors[i * 3 + 1] = color.g;
+          mistColors[i * 3 + 2] = color.b;
+
+          // Accumulate colors for sky influence
+          totalR += color.r;
+          totalG += color.g;
+          totalB += color.b;
+        }
+
+        // Update mist particle attributes
+        mistData.particles.attributes.position.needsUpdate = true;
+        mistData.particles.attributes.color.needsUpdate = true;
+
+        // Calculate average mist color for sky influence
+        const avgR = totalR / mistParticleCount;
+        const avgG = totalG / mistParticleCount;
+        const avgB = totalB / mistParticleCount;
+        mistData.averageColor.setRGB(avgR, avgG, avgB);
+      }
+
       // Update controls
       controls.update();
 
@@ -481,12 +756,64 @@ const FloatingLand: React.FC = () => {
       // --- SKY DOME GRADIENT ANIMATION ---
       // Animate sky gradient
       const grad = getGradientColors(skyGradientStops, t);
-      skyMat.uniforms.topColor.value.setHex(grad.top);
-      skyMat.uniforms.bottomColor.value.setHex(grad.bottom);
+
+      // Get mist influence on sky colors
+      const skyMistData = (scene as any).mistData;
+      const mistInfluence = 0.3; // How much mist affects sky (0-1)
+
+      if (skyMistData) {
+        // Blend sky colors with mist colors
+        const topSkyColor = new THREE.Color(grad.top);
+        const bottomSkyColor = new THREE.Color(grad.bottom);
+        const mistColor = skyMistData.averageColor;
+
+        // Blend colors based on mist influence
+        topSkyColor.lerp(mistColor, mistInfluence * 0.5);
+        bottomSkyColor.lerp(mistColor, mistInfluence);
+
+        skyMat.uniforms.topColor.value.copy(topSkyColor);
+        skyMat.uniforms.bottomColor.value.copy(bottomSkyColor);
+      } else {
+        skyMat.uniforms.topColor.value.setHex(grad.top);
+        skyMat.uniforms.bottomColor.value.setHex(grad.bottom);
+      }
       // Remove renderer.setClearColor(skyColor, 1); (sky dome now handles background)
       ambientLight.color = ambientColor;
       directionalLight.color = sunColor;
       sunLight.color = sunColor;
+
+      // Animate clouds
+      const clouds = (cloudGroup as any).clouds;
+      if (clouds) {
+        clouds.forEach((cloud: any) => {
+          // Horizontal movement (wind effect)
+          cloud.mesh.position.x =
+            cloud.baseX +
+            Math.sin(time * cloud.speed + cloud.phase) * cloud.amplitude;
+
+          // Vertical floating movement
+          cloud.mesh.position.y =
+            cloud.baseY + Math.sin(time * 0.5 + cloud.phase * 2) * 1.5;
+
+          // Slight rotation
+          cloud.mesh.rotation.y += 0.001 * cloud.speed;
+
+          // Opacity variation based on time
+          const opacity = 0.6 + Math.sin(time * 0.3 + cloud.phase) * 0.2;
+          cloud.mesh.traverse((child: any) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              if (Array.isArray(mesh.material)) {
+                mesh.material.forEach((mat) => {
+                  mat.opacity = opacity;
+                });
+              } else {
+                mesh.material.opacity = opacity;
+              }
+            }
+          });
+        });
+      }
 
       renderer.render(scene, camera);
       animationIdRef.current = requestAnimationFrame(animate);
@@ -517,25 +844,16 @@ const FloatingLand: React.FC = () => {
     };
   }, []);
 
-  // Preload red rose GLB for faster modal opening
+  // Raycaster for clickable objects (rose, mango, cherry)
   useEffect(() => {
-    const loader = new GLTFLoader();
-    loader.load(
-      "/garden/red_rose.glb",
-      (gltf) => {
-        redRoseRef.current = gltf.scene;
-        setRedRoseLoaded(true);
-      },
-      undefined,
-      (error) => {
-        console.error("Error preloading red rose:", error);
-      }
-    );
-  }, []);
-
-  // Raycaster for rose bush click and hover
-  useEffect(() => {
-    if (!rendererRef.current || !roseBushRef.current || !roseBushLoaded) return;
+    if (
+      !rendererRef.current ||
+      !roseBushRef.current ||
+      !mangoTreeRef.current ||
+      !cherryTreeRef.current ||
+      !roseBushLoaded
+    )
+      return;
     const renderer = rendererRef.current;
     const dom = renderer.domElement;
     const raycaster = new THREE.Raycaster();
@@ -549,10 +867,21 @@ const FloatingLand: React.FC = () => {
         (sceneRef.current as any).children.find((c: any) => c.isCamera) ||
           mainCameraRef.current
       );
-      const intersects = raycaster.intersectObject(roseBushRef.current!, true);
-      console.log("Rose bush raycast intersects:", intersects);
-      if (intersects.length > 0) {
-        setShowRoseModal(true);
+      // Check all clickable objects
+      const objects = [
+        { ref: roseBushRef, id: "rose" },
+        { ref: mangoTreeRef, id: "mango" },
+        { ref: cherryTreeRef, id: "cherry" },
+      ];
+      for (const obj of objects) {
+        const intersects = raycaster.intersectObject(obj.ref.current!, true);
+        if (intersects.length > 0) {
+          setSelectedObjectInfo(infoMap[obj.id]);
+          setSelectedPreloadedModel(
+            preloadedModels[infoMap[obj.id].modelPath] || null
+          );
+          return;
+        }
       }
     }
     function onMouseMove(event: MouseEvent) {
@@ -564,13 +893,24 @@ const FloatingLand: React.FC = () => {
         (sceneRef.current as any).children.find((c: any) => c.isCamera) ||
           mainCameraRef.current
       );
-      const intersects = raycaster.intersectObject(roseBushRef.current!, true);
-      const hitRose = intersects.length > 0;
-      if (hitRose) {
-        setRoseHovered(true);
-        dom.style.cursor = "pointer";
-      } else {
-        setRoseHovered(false);
+      // Check all clickable objects for hover
+      let found = false;
+      const objects = [
+        { ref: roseBushRef, id: "rose" },
+        { ref: mangoTreeRef, id: "mango" },
+        { ref: cherryTreeRef, id: "cherry" },
+      ];
+      for (const obj of objects) {
+        const intersects = raycaster.intersectObject(obj.ref.current!, true);
+        if (intersects.length > 0) {
+          setHoveredObjectId(obj.id);
+          dom.style.cursor = "pointer";
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        setHoveredObjectId(null);
         dom.style.cursor = "";
       }
     }
@@ -581,39 +921,43 @@ const FloatingLand: React.FC = () => {
       dom.removeEventListener("mousemove", onMouseMove);
       dom.style.cursor = "";
     };
-  }, [roseBushLoaded]);
+  }, [roseBushLoaded, preloadedModels]);
 
-  // Highlight rose bush on hover
+  // Highlight rose bush, mango, and cherry on hover
   useEffect(() => {
-    const roseBush = roseBushRef.current;
-    if (!roseBush) return;
-    roseBush.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        if (Array.isArray(mesh.material)) {
-          mesh.material.forEach((mat) => {
-            if ("emissive" in mat)
-              (mat.emissive as THREE.Color).set(
-                roseHovered ? 0x442222 : 0x000000
+    const highlight = (obj: THREE.Object3D | null, hovered: boolean) => {
+      if (!obj) return;
+      obj.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((mat) => {
+              if ("emissive" in mat)
+                (mat.emissive as THREE.Color).set(
+                  hovered ? 0x442222 : 0x000000
+                );
+              if ("emissiveIntensity" in mat)
+                mat.emissiveIntensity = hovered ? 0.2 : 0.0;
+            });
+          } else {
+            if ("emissive" in mesh.material)
+              (mesh.material.emissive as THREE.Color).set(
+                hovered ? 0x442222 : 0x000000
               );
-            if ("emissiveIntensity" in mat)
-              mat.emissiveIntensity = roseHovered ? 0.2 : 0.0;
-          });
-        } else {
-          if ("emissive" in mesh.material)
-            (mesh.material.emissive as THREE.Color).set(
-              roseHovered ? 0x442222 : 0x000000
-            );
-          if ("emissiveIntensity" in mesh.material)
-            mesh.material.emissiveIntensity = roseHovered ? 0.5 : 0.0;
+            if ("emissiveIntensity" in mesh.material)
+              mesh.material.emissiveIntensity = hovered ? 0.5 : 0.0;
+          }
         }
-      }
-    });
-  }, [roseHovered]);
+      });
+    };
+    highlight(roseBushRef.current, hoveredObjectId === "rose");
+    highlight(mangoTreeRef.current, hoveredObjectId === "mango");
+    highlight(cherryTreeRef.current, hoveredObjectId === "cherry");
+  }, [hoveredObjectId]);
 
   // Modal for rotating red rose and stats
   useEffect(() => {
-    if (!showRoseModal || !modalCanvasRef.current) return;
+    if (!selectedObjectInfo || !modalCanvasRef.current) return;
 
     // Setup Three.js scene for modal
     const scene = new THREE.Scene();
@@ -640,8 +984,8 @@ const FloatingLand: React.FC = () => {
 
     // Use preloaded red rose if available
     let roseMesh: THREE.Object3D | null = null;
-    if (redRoseRef.current) {
-      roseMesh = redRoseRef.current.clone();
+    if (selectedPreloadedModel) {
+      roseMesh = selectedPreloadedModel.clone();
       roseMesh.scale.set(0.8, 0.8, 0.8);
       roseMesh.position.set(0, -1.5, 0); // Lowered rose position
 
@@ -719,7 +1063,7 @@ const FloatingLand: React.FC = () => {
       renderer.dispose();
       modalCanvasRef.current && (modalCanvasRef.current.innerHTML = "");
     };
-  }, [showRoseModal, redRoseLoaded]);
+  }, [selectedObjectInfo, selectedPreloadedModel]);
 
   return (
     <>
@@ -734,80 +1078,17 @@ const FloatingLand: React.FC = () => {
           overflow: "hidden",
         }}
       />
-      {/* Rose Modal */}
-      {showRoseModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm">
-          <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg shadow-2xl p-2 sm:p-4 w-full max-w-sm max-h-screen border border-cyan-400/50 shadow-cyan-400/20 overflow-hidden">
-            {/* Glowing border effect */}
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-pink-500/20 blur-sm pointer-events-none"></div>
-            <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg p-3 sm:p-4 overflow-y-auto max-h-[90vh]">
-              {/* Close button with geeky styling */}
-              <button
-                className="absolute top-3 right-3 text-cyan-400 hover:text-red-400 text-xl font-mono bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded border border-cyan-400/30 transition-all duration-200 hover:border-red-400/50"
-                onClick={() => setShowRoseModal(false)}
-              >
-                [×]
-              </button>
-              {/* Header with tech styling */}
-              <div className="text-center mb-3">
-                <h2 className="text-xl font-bold mb-1 text-cyan-400 font-mono tracking-wider">
-                  &lt;RED_ROSE_BUSH&gt;
-                </h2>
-                <div className="text-xs text-gray-400 font-mono mb-1">
-                  [SYSTEM: FLORA_DATABASE_ACCESSED]
-                </div>
-              </div>
-              {/* 3D Canvas with geeky border */}
-              <div className="relative mb-3 flex justify-center">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-purple-500/20 rounded-lg blur-sm pointer-events-none"></div>
-                <div
-                  ref={modalCanvasRef}
-                  className="relative mx-auto rounded-lg border border-cyan-400/50 bg-gray-900"
-                  style={{
-                    width: "min(300px, 90vw)",
-                    height: "min(300px, 50vw)",
-                  }}
-                />
-              </div>
-              {/* Data panel with terminal styling */}
-              <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-600/50 font-mono text-xs">
-                <div className="text-cyan-400 mb-2">[DATA_ENTRY]</div>
-                <div className="space-y-1 text-gray-300">
-                  <div>
-                    <span className="text-green-400">Species:</span>{" "}
-                    <span className="text-yellow-400">Rosa × hybrida</span>
-                  </div>
-                  <div>
-                    <span className="text-green-400">Height:</span>{" "}
-                    <span className="text-yellow-400">~1.2m</span>
-                  </div>
-                  <div>
-                    <span className="text-green-400">Origin:</span>{" "}
-                    <span className="text-yellow-400">
-                      Cultivated worldwide
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-green-400">Status:</span>{" "}
-                    <span className="text-green-400">[ONLINE]</span>
-                  </div>
-                </div>
-                <div className="mt-2 text-gray-400 text-xs border-t border-gray-600/50 pt-2">
-                  <div className="text-purple-400">[NOTES]</div>
-                  <div className="text-gray-300 mt-1">
-                    This rose bush is prized for its vibrant color and classic
-                    fragrance. It thrives in well-drained soil and full sun.
-                  </div>
-                </div>
-              </div>
-              {/* Footer with tech details */}
-              <div className="text-center mt-3 text-xs text-gray-500 font-mono">
-                <div>SYSTEM: THREE.JS_RENDERER_v0.158.0</div>
-                <div>RENDER_TIME: {Date.now()}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Generic Object Modal */}
+      {selectedObjectInfo && (
+        <ObjectModal
+          isOpen={!!selectedObjectInfo}
+          onClose={() => {
+            setSelectedObjectInfo(null);
+            setSelectedPreloadedModel(null);
+          }}
+          infoData={selectedObjectInfo}
+          preloadedModel={selectedPreloadedModel}
+        />
       )}
       <div
         style={{
