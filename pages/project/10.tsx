@@ -36,6 +36,7 @@ const FloatingLand: React.FC = () => {
   const animationIdRef = useRef<number | null>(null);
   const [hoveredObjectId, setHoveredObjectId] = useState<string | null>(null);
   const [cloudGroup, setCloudGroup] = useState<THREE.Group | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
 
   // Preload all models for instant modal
   useEffect(() => {
@@ -172,7 +173,7 @@ const FloatingLand: React.FC = () => {
 
     // Time of day: 0 = midnight, 0.25 = sunrise, 0.5 = midday, 0.75 = sunset, 1 = midnight
     // Set to undefined for auto-animation, or a value 0-1 to test a specific time
-    let timeOfDay: number | undefined = 0.5; // e.g. 0.25 for sunrise, 0.5 for midday, undefined for auto
+    let timeOfDay: number | undefined = 0.25; // e.g. 0.25 for sunrise, 0.5 for midday, undefined for auto
 
     // Helper to interpolate between two colors
     function lerpColor(a: THREE.Color, b: THREE.Color, t: number) {
@@ -234,7 +235,7 @@ const FloatingLand: React.FC = () => {
     }
 
     // Lighting setup for sunny day
-    const ambientLight = new THREE.AmbientLight(0xffffff,1.2); // Increased from 0.4 to 0.7
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Increased from 0.4 to 0.7
     scene.add(ambientLight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); // Increased from 1 to 1.5
@@ -272,7 +273,7 @@ const FloatingLand: React.FC = () => {
     // Create floating land (10x bigger)
     const landGeometry = new THREE.BoxGeometry(32, 1, 16);
     const landMaterial = new THREE.MeshLambertMaterial({
-      color: 0x8b4513, // Brown color for earth
+      color: 0x013220, // Brown color for earth
       transparent: true,
       opacity: 0.9,
     });
@@ -286,12 +287,15 @@ const FloatingLand: React.FC = () => {
     // --- INSTANCED GRASS SYSTEM ---
     const grassBladeCount = 120000;
     const grassGeometry = new THREE.PlaneGeometry(0.03, 0.4);
+
+    // Create gradient material for grass using a simpler approach
     const grassMaterial = new THREE.MeshLambertMaterial({
-      color: new THREE.Color().setHSL(0.28, 0.7, 0.32),
+      color: new THREE.Color(0x4caf50), // Green color as base
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.5, // Lower opacity as requested
     });
+
     const grassMesh = new THREE.InstancedMesh(
       grassGeometry,
       grassMaterial,
@@ -327,9 +331,32 @@ const FloatingLand: React.FC = () => {
       dummy.rotation.set(0, yRot, 0);
       dummy.updateMatrix();
       grassMesh.setMatrixAt(i, dummy.matrix);
-      // Set up per-instance color (optional, for more variation)
+      // Set up per-instance color for gradient effect
       if (grassMesh.instanceColor) {
-        grassMesh.setColorAt(i, new THREE.Color().setHSL(0.28, 0.7, colorL));
+        // Create gradient from white to blue to green based on height
+        const heightRatio = height / 0.9; // Normalize height
+        let color;
+        if (heightRatio < 0.33) {
+          // White to blue (root to middle)
+          const t = heightRatio / 0.33;
+          color = new THREE.Color().lerpColors(
+            new THREE.Color(0xffffff), // White
+            new THREE.Color(0x4fc3f7), // Blue
+            t
+          );
+        } else if (heightRatio < 0.66) {
+          // Blue to green (middle to tip)
+          const t = (heightRatio - 0.33) / 0.33;
+          color = new THREE.Color().lerpColors(
+            new THREE.Color(0x4fc3f7), // Blue
+            new THREE.Color(0x4caf50), // Green
+            t
+          );
+        } else {
+          // Green at tip
+          color = new THREE.Color(0x4caf50);
+        }
+        grassMesh.setColorAt(i, color);
       }
       bladeData.push({ x, z, height, phase, yRot, colorL });
     }
@@ -343,92 +370,8 @@ const FloatingLand: React.FC = () => {
     // Add some rocks
     // for (let i = 0; i < 5; i++) { ... }
 
-    // Add animated mathematical clouds
-    // Create animated clouds using mathematical functions
-    const cloudGroup = new THREE.Group();
-    scene.add(cloudGroup);
-    setCloudGroup(cloudGroup);
-
-    // Cloud generation parameters
-    const cloudCount = 12;
-    const clouds: {
-      mesh: THREE.Mesh;
-      speed: number;
-      amplitude: number;
-      phase: number;
-      baseY: number;
-      baseX: number;
-      baseZ: number;
-    }[] = [];
-
-    // Generate clouds using mathematical functions
-    for (let i = 0; i < cloudCount; i++) {
-      // Create cloud shape using multiple spheres
-      const cloudGeometry = new THREE.SphereGeometry(1, 8, 8);
-      const cloudMaterial = new THREE.MeshLambertMaterial({
-        color: new THREE.Color().setHSL(0.6, 0.1, 0.95), // Light blue-white
-        transparent: true,
-        opacity: 0.8,
-      });
-
-      // Create main cloud body
-      const mainCloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
-
-      // Add smaller spheres for cloud puffs
-      const puffCount = 3 + Math.floor(Math.random() * 4);
-      for (let j = 0; j < puffCount; j++) {
-        const puffGeometry = new THREE.SphereGeometry(
-          0.3 + Math.random() * 0.4,
-          6,
-          6
-        );
-        const puff = new THREE.Mesh(puffGeometry, cloudMaterial);
-
-        // Position puffs around main cloud
-        const angle = (j / puffCount) * Math.PI * 2;
-        const radius = 0.8 + Math.random() * 0.4;
-        puff.position.set(
-          Math.cos(angle) * radius,
-          Math.sin(angle) * radius * 0.5,
-          (Math.random() - 0.5) * 0.6
-        );
-        mainCloud.add(puff);
-      }
-
-      // Position clouds in a large dome around the scene
-      const angle = (i / cloudCount) * Math.PI * 2 + Math.random() * 0.5;
-      const radius = 40 + Math.random() * 20;
-      const baseY = 8 + Math.random() * 8; // Lowered from 15+10 to 8+8
-      const baseX = Math.cos(angle) * radius;
-      const baseZ = Math.sin(angle) * radius;
-
-      mainCloud.position.set(baseX, baseY, baseZ);
-      mainCloud.scale.set(
-        2 + Math.random() * 3,
-        1.5 + Math.random() * 2,
-        2 + Math.random() * 3
-      );
-
-      // Random rotation for variety
-      mainCloud.rotation.y = Math.random() * Math.PI * 2;
-      mainCloud.rotation.x = Math.random() * 0.2 - 0.1;
-
-      cloudGroup.add(mainCloud);
-
-      // Store animation parameters
-      clouds.push({
-        mesh: mainCloud,
-        speed: 0.2 + Math.random() * 0.3,
-        amplitude: 2 + Math.random() * 3,
-        phase: Math.random() * Math.PI * 2,
-        baseY,
-        baseX,
-        baseZ,
-      });
-    }
-
-    // Store clouds array for animation
-    (cloudGroup as any).clouds = clouds;
+    // Add animated clouds using the AnimatedClouds component
+    // The AnimatedClouds component will be rendered separately and will handle its own cloud generation
 
     // Add floating particles (dust motes in sunlight)
     const particleCount = 100;
@@ -458,71 +401,6 @@ const FloatingLand: React.FC = () => {
 
     const particleSystem = new THREE.Points(particles, particleMaterial);
     scene.add(particleSystem);
-
-    // Create magical mist around the ground
-    const mistParticleCount = 2000;
-    const mistParticles = new THREE.BufferGeometry();
-    const mistPositions = new Float32Array(mistParticleCount * 3);
-    const mistColors = new Float32Array(mistParticleCount * 3);
-    const mistSizes = new Float32Array(mistParticleCount);
-    const mistPhases = new Float32Array(mistParticleCount);
-
-    // Generate mist particles around the ground
-    for (let i = 0; i < mistParticleCount; i++) {
-      // Position mist around the land area
-      const x = (Math.random() - 0.5) * 40;
-      const y = Math.random() * 1.5 - 2.5; // Mist at land level (-3) with small range above
-      const z = (Math.random() - 0.5) * 25;
-
-      mistPositions[i * 3] = x;
-      mistPositions[i * 3 + 1] = y;
-      mistPositions[i * 3 + 2] = z;
-
-      // Random shimmering colors (pastel rainbow)
-      const hue = Math.random();
-      const color = new THREE.Color().setHSL(hue, 0.6, 0.8);
-      mistColors[i * 3] = color.r;
-      mistColors[i * 3 + 1] = color.g;
-      mistColors[i * 3 + 2] = color.b;
-
-      mistSizes[i] = 0.05 + Math.random() * 0.1;
-      mistPhases[i] = Math.random() * Math.PI * 2;
-    }
-
-    mistParticles.setAttribute(
-      "position",
-      new THREE.BufferAttribute(mistPositions, 3)
-    );
-    mistParticles.setAttribute(
-      "color",
-      new THREE.BufferAttribute(mistColors, 3)
-    );
-    mistParticles.setAttribute("size", new THREE.BufferAttribute(mistSizes, 1));
-
-    const mistMaterial = new THREE.PointsMaterial({
-      size: 0.1,
-      transparent: true,
-      opacity: 0.6,
-      vertexColors: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-
-    const mistSystem = new THREE.Points(mistParticles, mistMaterial);
-    scene.add(mistSystem);
-
-    // Store mist data for animation and sky influence
-    const mistData = {
-      particles: mistParticles,
-      positions: mistPositions,
-      colors: mistColors,
-      phases: mistPhases,
-      system: mistSystem,
-      averageColor: new THREE.Color(0x87ceeb), // Default sky blue
-    };
-
-    // Store mist data for external access
-    (scene as any).mistData = mistData;
 
     // Load mango tree GLB and add to land
     const loader = new GLTFLoader();
@@ -583,10 +461,6 @@ const FloatingLand: React.FC = () => {
         roseBushRef.current = roseBush;
         land.add(roseBush);
         setRoseBushLoaded(true); // Mark as loaded and ready for interaction
-        // Remove the yellow BoxHelper for the rose bush
-        // const boxHelper = new BoxHelper(roseBush, 0xffff00);
-        // boxHelper.rotation.copy(roseBush.rotation);
-        // land.add(boxHelper);
       },
       undefined,
       (error) => {
@@ -624,6 +498,37 @@ const FloatingLand: React.FC = () => {
       }
     );
 
+    // Load basil.glb and place it to the left of the marigold
+    loader.load(
+      "/garden/basil.glb",
+      (gltf) => {
+        const basil = gltf.scene;
+        basil.position.set(-15, 0, 15); // To the left of marigold (same z as marigold)
+        basil.scale.set(0.03, 0.03, 0.03); // Adjust scale as needed
+        land.add(basil);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading basil:", error);
+      }
+    );
+
+    // Load basil.glb and place it to the left of the marigold
+    loader.load(
+      "/garden/aloe_vera.glb",
+      (gltf) => {
+        const aloeVera = gltf.scene;
+        aloeVera.position.set(-8, 0.5, 7); // To the left of marigold (same z as marigold)
+        aloeVera.scale.set(5, 5, 5); // Adjust scale as needed
+        aloeVera.rotation.set(0, 90, 0); // Adjust rotation as needed
+        land.add(aloeVera);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading basil:", error);
+      }
+    );
+
     // Animation variables
     let time = 0;
     const landInitialY = land.position.y;
@@ -631,12 +536,13 @@ const FloatingLand: React.FC = () => {
     // Animation loop
     const animate = () => {
       time += 0.01;
+      setCurrentTime(time);
 
       // Gentle floating animation for the land
       land.position.y = landInitialY + Math.sin(time * 0.5) * 0.3;
       // --- INSTANCED GRASS ANIMATION ---
       for (let i = 0; i < grassBladeCount; i++) {
-        const { x, z, height, phase, yRot, colorL } = bladeData[i];
+        const { x, z, height, phase, yRot } = bladeData[i];
         // Animate waving (rotation.z), not Y
         const gust = Math.sin(time * 0.1) > 0.8 ? 2.2 : 1.0;
         const wind =
@@ -646,13 +552,6 @@ const FloatingLand: React.FC = () => {
         dummy.rotation.set(0, yRot, wind);
         dummy.updateMatrix();
         grassMesh.setMatrixAt(i, dummy.matrix);
-        // Optionally animate color (darker when bent)
-        if (grassMesh.instanceColor) {
-          grassMesh.setColorAt(
-            i,
-            new THREE.Color().setHSL(0.28, 0.7, colorL - Math.abs(wind) * 0.15)
-          );
-        }
       }
       grassMesh.instanceMatrix.needsUpdate = true;
       if (grassMesh.instanceColor) grassMesh.instanceColor.needsUpdate = true;
@@ -688,58 +587,6 @@ const FloatingLand: React.FC = () => {
       }
       particles.attributes.position.needsUpdate = true;
 
-      // Animate magical mist
-      const mistData = (scene as any).mistData;
-      if (mistData) {
-        const mistPositions = mistData.positions;
-        const mistColors = mistData.colors;
-        const mistPhases = mistData.phases;
-        let totalR = 0,
-          totalG = 0,
-          totalB = 0;
-
-        for (let i = 0; i < mistParticleCount; i++) {
-          const phase = mistPhases[i];
-
-          // Gentle floating movement
-          mistPositions[i * 3 + 1] += Math.sin(time * 0.5 + phase) * 0.002;
-
-          // Horizontal drift
-          mistPositions[i * 3] += Math.sin(time * 0.3 + phase * 2) * 0.001;
-          mistPositions[i * 3 + 2] +=
-            Math.cos(time * 0.4 + phase * 1.5) * 0.001;
-
-          // Keep mist within bounds
-          if (mistPositions[i * 3 + 1] > 0.5) mistPositions[i * 3 + 1] = -1;
-          if (mistPositions[i * 3 + 1] < -1) mistPositions[i * 3 + 1] = 0.5;
-
-          // Shimmering color changes
-          const hue = (time * 0.1 + phase) % 1;
-          const saturation = 0.6 + Math.sin(time * 0.5 + phase) * 0.2;
-          const lightness = 0.7 + Math.sin(time * 0.3 + phase * 3) * 0.2;
-
-          const color = new THREE.Color().setHSL(hue, saturation, lightness);
-          mistColors[i * 3] = color.r;
-          mistColors[i * 3 + 1] = color.g;
-          mistColors[i * 3 + 2] = color.b;
-
-          // Accumulate colors for sky influence
-          totalR += color.r;
-          totalG += color.g;
-          totalB += color.b;
-        }
-
-        // Update mist particle attributes
-        mistData.particles.attributes.position.needsUpdate = true;
-        mistData.particles.attributes.color.needsUpdate = true;
-
-        // Calculate average mist color for sky influence
-        const avgR = totalR / mistParticleCount;
-        const avgG = totalG / mistParticleCount;
-        const avgB = totalB / mistParticleCount;
-        mistData.averageColor.setRGB(avgR, avgG, avgB);
-      }
-
       // Update controls
       controls.update();
 
@@ -758,62 +605,31 @@ const FloatingLand: React.FC = () => {
       const grad = getGradientColors(skyGradientStops, t);
 
       // Get mist influence on sky colors
-      const skyMistData = (scene as any).mistData;
-      const mistInfluence = 0.3; // How much mist affects sky (0-1)
+      // const skyMistData = (scene as any).mistData; // Removed mist influence
+      // const mistInfluence = 0.3; // How much mist affects sky (0-1) // Removed mist influence
 
-      if (skyMistData) {
-        // Blend sky colors with mist colors
-        const topSkyColor = new THREE.Color(grad.top);
-        const bottomSkyColor = new THREE.Color(grad.bottom);
-        const mistColor = skyMistData.averageColor;
+      // if (skyMistData) { // Removed mist influence
+      //   // Blend sky colors with mist colors // Removed mist influence
+      //   const topSkyColor = new THREE.Color(grad.top); // Removed mist influence
+      //   const bottomSkyColor = new THREE.Color(grad.bottom); // Removed mist influence
+      //   const mistColor = skyMistData.averageColor; // Removed mist influence
 
-        // Blend colors based on mist influence
-        topSkyColor.lerp(mistColor, mistInfluence * 0.5);
-        bottomSkyColor.lerp(mistColor, mistInfluence);
+      //   // Blend colors based on mist influence // Removed mist influence
+      //   topSkyColor.lerp(mistColor, mistInfluence * 0.5); // Removed mist influence
+      //   bottomSkyColor.lerp(mistColor, mistInfluence); // Removed mist influence
 
-        skyMat.uniforms.topColor.value.copy(topSkyColor);
-        skyMat.uniforms.bottomColor.value.copy(bottomSkyColor);
-      } else {
-        skyMat.uniforms.topColor.value.setHex(grad.top);
-        skyMat.uniforms.bottomColor.value.setHex(grad.bottom);
-      }
-      // Remove renderer.setClearColor(skyColor, 1); (sky dome now handles background)
+      //   skyMat.uniforms.topColor.value.copy(topSkyColor); // Removed mist influence
+      //   skyMat.uniforms.bottomColor.value.copy(bottomSkyColor); // Removed mist influence
+      // } else { // Removed mist influence
+      skyMat.uniforms.topColor.value.setHex(grad.top);
+      skyMat.uniforms.bottomColor.value.setHex(grad.bottom);
+      // } // Removed mist influence
       ambientLight.color = ambientColor;
       directionalLight.color = sunColor;
       sunLight.color = sunColor;
 
-      // Animate clouds
-      const clouds = (cloudGroup as any).clouds;
-      if (clouds) {
-        clouds.forEach((cloud: any) => {
-          // Horizontal movement (wind effect)
-          cloud.mesh.position.x =
-            cloud.baseX +
-            Math.sin(time * cloud.speed + cloud.phase) * cloud.amplitude;
-
-          // Vertical floating movement
-          cloud.mesh.position.y =
-            cloud.baseY + Math.sin(time * 0.5 + cloud.phase * 2) * 1.5;
-
-          // Slight rotation
-          cloud.mesh.rotation.y += 0.001 * cloud.speed;
-
-          // Opacity variation based on time
-          const opacity = 0.6 + Math.sin(time * 0.3 + cloud.phase) * 0.2;
-          cloud.mesh.traverse((child: any) => {
-            if ((child as THREE.Mesh).isMesh) {
-              const mesh = child as THREE.Mesh;
-              if (Array.isArray(mesh.material)) {
-                mesh.material.forEach((mat) => {
-                  mat.opacity = opacity;
-                });
-              } else {
-                mesh.material.opacity = opacity;
-              }
-            }
-          });
-        });
-      }
+      // Animate clouds using the AnimatedClouds component
+      // The AnimatedClouds component handles its own animation internally
 
       renderer.render(scene, camera);
       animationIdRef.current = requestAnimationFrame(animate);
@@ -969,11 +785,11 @@ const FloatingLand: React.FC = () => {
     modalCanvasRef.current.appendChild(renderer.domElement);
 
     // Lighting
-    const ambient = new THREE.AmbientLight(0xfff4e6, 0.6); // Warm ambient light
+    const ambient = new THREE.AmbientLight(0xfff4e6, 5); // Warm ambient light
     scene.add(ambient);
 
     // Add directional light for better color visibility
-    const directional = new THREE.DirectionalLight(0xffe066, 0.8); // Warm yellow directional light
+    const directional = new THREE.DirectionalLight(0xffe066, 5); // Warm yellow directional light
     directional.position.set(5, 5, 5);
     scene.add(directional);
 
@@ -1078,10 +894,14 @@ const FloatingLand: React.FC = () => {
           overflow: "hidden",
         }}
       />
+      {/* Animated Clouds Component */}
+      {sceneRef.current && (
+        <AnimatedClouds scene={sceneRef.current} time={currentTime} />
+      )}
       {/* Generic Object Modal */}
       {selectedObjectInfo && (
         <ObjectModal
-          isOpen={!!selectedObjectInfo}
+          isOpen={true}
           onClose={() => {
             setSelectedObjectInfo(null);
             setSelectedPreloadedModel(null);
