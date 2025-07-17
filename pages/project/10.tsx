@@ -153,6 +153,11 @@ const FloatingLand: React.FC = () => {
     renderer.setClearColor(0x87ceeb, 1); // Sky blue background
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // Configure canvas for touch events
+    renderer.domElement.style.touchAction = "none"; // Prevent default touch behaviors
+    renderer.domElement.style.userSelect = "none"; // Prevent text selection
+
     rendererRef.current = renderer;
 
     mountRef.current.appendChild(renderer.domElement);
@@ -161,7 +166,7 @@ const FloatingLand: React.FC = () => {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true; // Smooth camera movement
     controls.dampingFactor = 0.05;
-    controls.screenSpacePanning = false;
+    controls.screenSpacePanning = true; // Enable for better mobile experience
     controls.minDistance = 3; // Minimum zoom distance
     controls.maxDistance = 50; // Maximum zoom distance
     controls.maxPolarAngle = Math.PI / 2; // Prevent going below ground level
@@ -170,6 +175,12 @@ const FloatingLand: React.FC = () => {
     controls.enableRotate = true; // Enable rotation
     controls.autoRotate = false; // Disable auto-rotation initially
     controls.autoRotateSpeed = 0.5; // Speed if auto-rotation is enabled
+
+    // Mobile-specific settings
+    controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_PAN,
+    };
 
     // Time of day: 0 = midnight, 0.25 = sunrise, 0.5 = midday, 0.75 = sunset, 1 = midnight
     // Set to undefined for auto-animation, or a value 0-1 to test a specific time
@@ -674,15 +685,39 @@ const FloatingLand: React.FC = () => {
     const dom = renderer.domElement;
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    function onClick(event: MouseEvent) {
+
+    // Helper function to handle pointer events (works for both mouse and touch)
+    function handlePointerEvent(event: PointerEvent | TouchEvent) {
       const rect = dom.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      let clientX: number, clientY: number;
+
+      if (event instanceof PointerEvent) {
+        clientX = event.clientX;
+        clientY = event.clientY;
+      } else {
+        // Touch event
+        const touch = event.touches[0] || event.changedTouches[0];
+        if (!touch) return;
+        clientX = touch.clientX;
+        clientY = touch.clientY;
+      }
+
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
       raycaster.setFromCamera(
         mouse,
         (sceneRef.current as any).children.find((c: any) => c.isCamera) ||
           mainCameraRef.current
       );
+
+      return raycaster;
+    }
+
+    function onClick(event: PointerEvent) {
+      const raycaster = handlePointerEvent(event);
+      if (!raycaster) return;
+
       // Check all clickable objects
       const objects = [
         { ref: roseBushRef, id: "rose" },
@@ -700,15 +735,35 @@ const FloatingLand: React.FC = () => {
         }
       }
     }
-    function onMouseMove(event: MouseEvent) {
-      const rect = dom.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(
-        mouse,
-        (sceneRef.current as any).children.find((c: any) => c.isCamera) ||
-          mainCameraRef.current
-      );
+
+    function onTouchStart(event: TouchEvent) {
+      // Prevent default to avoid scrolling when touching objects
+      event.preventDefault();
+      const raycaster = handlePointerEvent(event);
+      if (!raycaster) return;
+
+      // Check all clickable objects
+      const objects = [
+        { ref: roseBushRef, id: "rose" },
+        { ref: mangoTreeRef, id: "mango" },
+        { ref: cherryTreeRef, id: "cherry" },
+      ];
+      for (const obj of objects) {
+        const intersects = raycaster.intersectObject(obj.ref.current!, true);
+        if (intersects.length > 0) {
+          setSelectedObjectInfo(infoMap[obj.id]);
+          setSelectedPreloadedModel(
+            preloadedModels[infoMap[obj.id].modelPath] || null
+          );
+          return;
+        }
+      }
+    }
+
+    function onMouseMove(event: PointerEvent) {
+      const raycaster = handlePointerEvent(event);
+      if (!raycaster) return;
+
       // Check all clickable objects for hover
       let found = false;
       const objects = [
@@ -730,11 +785,16 @@ const FloatingLand: React.FC = () => {
         dom.style.cursor = "";
       }
     }
-    dom.addEventListener("click", onClick);
-    dom.addEventListener("mousemove", onMouseMove);
+
+    // Add event listeners for both mouse and touch
+    dom.addEventListener("pointerdown", onClick);
+    dom.addEventListener("touchstart", onTouchStart, { passive: false });
+    dom.addEventListener("pointermove", onMouseMove);
+
     return () => {
-      dom.removeEventListener("click", onClick);
-      dom.removeEventListener("mousemove", onMouseMove);
+      dom.removeEventListener("pointerdown", onClick);
+      dom.removeEventListener("touchstart", onTouchStart);
+      dom.removeEventListener("pointermove", onMouseMove);
       dom.style.cursor = "";
     };
   }, [roseBushLoaded, preloadedModels]);
