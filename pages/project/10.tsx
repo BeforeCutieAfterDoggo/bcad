@@ -736,12 +736,11 @@ const FloatingLand: React.FC = () => {
       }
     }
 
-    function onTouchStart(event: TouchEvent) {
+    function onTouchEnd(event: TouchEvent) {
       // Prevent default to avoid scrolling when touching objects
       event.preventDefault();
       const raycaster = handlePointerEvent(event);
       if (!raycaster) return;
-
       // Check all clickable objects
       const objects = [
         { ref: roseBushRef, id: "rose" },
@@ -788,12 +787,12 @@ const FloatingLand: React.FC = () => {
 
     // Add event listeners for both mouse and touch
     dom.addEventListener("pointerdown", onClick);
-    dom.addEventListener("touchstart", onTouchStart, { passive: false });
+    dom.addEventListener("touchend", onTouchEnd, { passive: false });
     dom.addEventListener("pointermove", onMouseMove);
 
     return () => {
       dom.removeEventListener("pointerdown", onClick);
-      dom.removeEventListener("touchstart", onTouchStart);
+      dom.removeEventListener("touchend", onTouchEnd);
       dom.removeEventListener("pointermove", onMouseMove);
       dom.style.cursor = "";
     };
